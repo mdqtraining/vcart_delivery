@@ -98,7 +98,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
                                 IconButton(onPressed: (){_isExpand == true;},
                                     icon: Icon(Icons.keyboard_arrow_down_sharp))
                               ],),
-                            _isExpand == true ? : null ,
+                            _isExpand == true ? expanded(orderId: listData?[index].orderId) : null ,
                           ],
                         ),
                       ),
@@ -115,10 +115,9 @@ class _OrderListContainerState extends State<OrderListContainer> {
     //     if(isExpand)...[OrderDetailedView(
     // orderId: getOrders.orderModel?.data?[index].orderId ?? 0,
     // ),
-
-        OrderDetailedView()
+        OrderDetailedView(orderId: orderId),
     SizedBox(height: 16),
-    OrderDeliveryAddress(orderId: getOrders.orderModel?.data?[index].orderId ?? 0),
+    OrderDeliveryAddress(orderId: orderId),
     SizedBox(height: 16),
     Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -128,10 +127,10 @@ class _OrderListContainerState extends State<OrderListContainer> {
     SizedBox(height: 16),
     Padding(
     padding: const EdgeInsets.only(bottom: 24),
-    child: clickableButton(),
+    //child: clickableButton(),
     ),
       ],
-    )
+    );
   }
 }
 
