@@ -36,15 +36,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ParticularPickupItemNotifier()),
 
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomeScreenStore1(),
-        //routerConfig: AppRouter().router,
+        //home: HomeScreenStore1(),
+        routerConfig: AppRouter().router,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Model/OrderStoerModel/list_data.dart';
 import '../../../Model/Orders/orders_getall.dart';
@@ -25,8 +26,11 @@ class getOrders_Notifier extends ChangeNotifier{
     _isLoading = true;
     notifyListeners();
     try{
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final deliverID = prefs.getInt('deliveryPersonId');
+
       _orderModel = await deliverySerivce.getOrderService(
-          deliveryPersonId: Helper.deliveryPersonId,
+          deliveryPersonId: deliveryPersonId,
           orderStatus: orderStatus,
           dateFilter: dateFilter);
       notifyListeners();

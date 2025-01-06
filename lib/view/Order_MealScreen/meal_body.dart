@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
+import '../../provider/GlobalProvide/OrderList/particularPickupItemNotifier.dart';
 import 'extended_content.dart';
 import '../../Model/OrderMealModel/meal_page_model.dart';
 
@@ -21,43 +23,56 @@ class _MealBodyState extends State<MealBody> {
   @override
   void initState() {
 
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<getOrders_Notifier>(context,listen: false);
-      Provider.of<getOrders_Notifier>(context,listen: false).getAllOrders(deliveryPersonId: 0);
-    });
-    //print()
     super.initState();
+
+    print("Starting........");
+    try{
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final deliveryPersonId = prefs.getInt("deliveryPersonId");
+
+        print(deliveryPersonId);
+        final getProducts = Provider.of<ParticularPickupItemNotifier>(context, listen: false);
+        await getProducts.getPickupData(deliveryPersonId: deliveryPersonId ?? 0);
+
+        final ordersCount = getProducts.particularPickupData?.data?.length;
+        print("Number of Orders: $ordersCount");
+
+        setState(() {
+          isExpanded = List.generate(ordersCount!, (_) => false);
+        });
+      });
+    }catch(e){
+      print(e);
+    }
   }
 
-  bool isExpand = false;
 
-  _isExpanded() {
-    setState(() {
-      isExpand = !isExpand;
-    });
-  }
+  List<bool> isExpanded = [];
+
 
   @override
   Widget build(BuildContext context) {
 
 
-    return Consumer<getOrders_Notifier>(
+    return Consumer<ParticularPickupItemNotifier>(
       builder: (context,getOrders,child){
-        if(getOrders.orderModel?.data == null || getOrders.orderModel!.data!.isEmpty){
+        final pickData = getOrders.particularPickupData?.data;
+        if(pickData == null || pickData.isEmpty){
           return Center(
             child: Text('No orders available'),
           );
         }
-        print(getOrders.orderModel!.data!);
+        print(pickData);
         return ListView.builder(
-          itemCount: getOrders.orderModel!.data!.length,
+          itemCount: pickData.length,
           itemBuilder: (context,index) {
-            final firstOrder = getOrders.orderModel!.data![index];
+            final firstOrder = pickData[index];
 
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
               width: 360,
-              height: isExpand ? null : 130,
+              height: isExpanded[index] ? null : 130,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(8),
@@ -73,7 +88,7 @@ class _MealBodyState extends State<MealBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Vanakam"),
+                        Text(firstOrder.orderId.toString()),
                         Spacer(),
                         SvgPicture.asset(staticIcons.call),
                         SizedBox(width: 8),
@@ -90,43 +105,53 @@ class _MealBodyState extends State<MealBody> {
                   ),
 
                   //Orders
-                  InkWell(
-                    onTap: () {
-                      _isExpanded();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  // ListView.builder(
+                  //   itemCount: 2,
+                  //   itemBuilder: (context,index) {
+                      //child:
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isExpanded[index] =
+                            !isExpanded[index];
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(firstOrder.orderId.toString()),
-                            //   Text("${widget.mealModel.preference}| ${widget
-                            //       .mealModel.Time} PM"),
-                             ],
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(firstOrder.orderId.toString()),
+                                  //   Text("${widget.mealModel.preference}| ${widget
+                                  //       .mealModel.Time} PM"),
+                                ],
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(color: getColor(
+                                    firstOrder.orderStatus ?? "")),
+                                child: Text(firstOrder.orderStatus ?? "",
+                                  style: GoogleFonts.istokWeb(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14,
+                                      color: gettextColor(
+                                          firstOrder.orderStatus ?? "")
+                                  ),),
+                              ),
+                            ],
                           ),
-                          Spacer(),
-                          Container(
-                            decoration: BoxDecoration(color: getColor(
-                                firstOrder.orderStatus)),
-                            child: Text(firstOrder.orderStatus,
-                              style: GoogleFonts.istokWeb(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14,
-                                  color: gettextColor(firstOrder.orderStatus)
-                              ),),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
 
-                  if (isExpand)
-                    MealPageDetailedView(mealModel: firstOrder),
+                  isExpanded[index] ? MealPageDetailedView()
+                      : SizedBox.shrink()
+                  // if (isExpand)
+                  //   MealPageDetailedView(mealModel: firstOrder),
                 ],
               ),
             );

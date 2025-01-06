@@ -135,26 +135,26 @@
 //                                                     ),)),
 //                                             )
 //                                           ],
-                                //        ),
-                              //           if(isExpand)...[OrderDetailedView(
-                              //             orderId: getOrders.orderModel?.data?[index].orderId ?? 0,
-                              //           ),
-                              //             SizedBox(height: 16),
-                              //             OrderDeliveryAddress(orderId: getOrders.orderModel?.data?[index].orderId ?? 0),
-                              //             SizedBox(height: 16),
-                              //             Padding(
-                              //               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              //               child: DeliveryPickupDetail(),
-                              //             ),
-                              //
-                              //             SizedBox(height: 16),
-                              //             Padding(
-                              //               padding: const EdgeInsets.only(bottom: 24),
-                              //               child: clickableButton(),
-                              //             ),
-                              //           ],
-                              //         ])
-                              // ),
+//                                        ),
+//                                         if(isExpand)...[OrderDetailedView(
+//                                           orderId: getOrders.orderModel?.data?[index].orderId ?? 0,
+//                                         ),
+//                                           SizedBox(height: 16),
+//                                           OrderDeliveryAddress(orderId: getOrders.orderModel?.data?[index].orderId ?? 0),
+//                                           SizedBox(height: 16),
+//                                           Padding(
+//                                             padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                                             child: DeliveryPickupDetail(),
+//                                           ),
+//
+//                                           SizedBox(height: 16),
+//                                           Padding(
+//                                             padding: const EdgeInsets.only(bottom: 24),
+//                                             child: clickableButton(),
+//                                           ),
+//                                         ],
+//                                       ])
+//                               ),
 //                             ),
 //                           ],
 //                         ),
@@ -166,9 +166,9 @@
 //         }
 //     );
 //   }
-//   //),
-//   // );
-//   //}
+  //),
+  // );
+  //}
 //
 //   Color? getColor(String status){
 //     status = status.toLowerCase();

@@ -21,6 +21,10 @@ class GetParticularDeliveryItem extends ChangeNotifier{
     notifyListeners();
 
     try {
+
+      print(":::::Value of deliverypersonId and orderID fron here::::::::");
+      print(deliveryPersonId);
+      print(orderId);
       _particularItemData = await particularItem.getPartiularIte(
           deliveryPersonId: deliveryPersonId, orderId: orderId);
       notifyListeners();

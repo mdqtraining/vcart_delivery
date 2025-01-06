@@ -58,28 +58,6 @@ class _HomeScreenStore1State extends State<HomeScreenStore1> {
 
     );
   }
- // Container storePage(){
- //    return Container(
- //      child:ListView(
- //        //itemBuilder: (context,index){
- //          children: [
- //            if(orderdata.isEmpty)
- //              Padding(padding : EdgeInsets.only(top: 96),
- //                  child:
- //                  Image.asset(staticImages.emptyList,
- //                    width: 275,
- //                    height: 275,
- //                  ))
- //
- //            else
- //
- //             ...orderdata.map((index) => OrderListContainer(orderData: index)).toList()
- //
- //          ]
- //        //}
- //        ),
- //    );
- //  }
 
   Container storePage(){
     return Container(

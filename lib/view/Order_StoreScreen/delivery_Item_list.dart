@@ -3,18 +3,13 @@ import 'package:eatfit_delivery_partner/helper/helperClass.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_components/delivery_pickup_detail.dart';
-import '../../Model/OrderStoerModel/list_data.dart';
 import '../../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
-import '../../provider/GlobalProvide/OrderList/particularDeliveryItemNotifier.dart';
-import '../../provider/GlobalProvide/OrderList/particularPickupItemNotifier.dart';
-import 'order_deilver address.dart';
+
 import 'order_detailed_view.dart';
 
 class OrderListContainer extends StatefulWidget {
-
-  //final OrderData orderData;
 
   const OrderListContainer({super.key});
 
@@ -24,112 +19,202 @@ class OrderListContainer extends StatefulWidget {
 
 class _OrderListContainerState extends State<OrderListContainer> {
 
-  bool _isExpand = false;
+  List<bool> isExpanded = [];
 
-  void isExpanded(value) {
-    setState(() {
-      _isExpand = value;
-    });
-  }
 
   @override
   void initState() {
-    // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<getOrders_Notifier>(context, listen: false);
-      Provider.of<getOrders_Notifier>(context, listen: false).getAllOrders(deliveryPersonId: 0);
+    super.initState(); // Always call super.initState first
+    print("Initializing Delivery App...");
 
-      Provider.of<ParticularPickupItemNotifier>(context, listen: false);
-      Provider.of<ParticularPickupItemNotifier>(context, listen: false).getPickupData(deliveryPersonId: Helper.deliveryPersonId);
+    // Using WidgetsBinding to safely perform async calls after widget build
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        final deliveryPersonId = await _getDeliveryPersonId(); // Fetch Delivery Person ID
+        print("Retrieved DeliveryPersonId: $deliveryPersonId");
 
-      Provider.of<GetParticularDeliveryItem>(context,listen: false);
-      Provider.of<GetParticularDeliveryItem>(context,listen: false)
-          .getDeliveryItem(deliveryPersonId: Helper.deliveryPersonId, orderId: Helper.orderId);
+        // Fetch orders
+        final getOrdersNotifier = Provider.of<getOrders_Notifier>(context, listen: false);
+        await getOrdersNotifier.getAllOrders(deliveryPersonId: deliveryPersonId);
+
+        // Initialize toggle states (isExpanded list)
+        final ordersCount = getOrdersNotifier.orderModel?.data?.length ?? 0;
+        print("Number of Orders: $ordersCount");
+
+        setState(() {
+          isExpanded = List.generate(ordersCount, (_) => false);
+        });
+      } catch (e) {
+        print("Error in initState: $e");
+      }
     });
-    super.initState();
+  }
+
+// Fetch deliveryPersonId from SharedPreferences
+  Future<int> _getDeliveryPersonId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final deliveryPersonId = prefs.getInt("deliveryPersonId");
+
+    if (deliveryPersonId == null) {
+      throw Exception("DeliveryPersonId is not set in SharedPreferences");
+    }
+
+    return deliveryPersonId;
   }
 
   @override
   Widget build(BuildContext context) {
+    print(isExpanded);
+
+    //print("The expanded checing $_isExpand");
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
     return Consumer<getOrders_Notifier>(
         builder: (context, getOrders, child) {
-          print(getOrders.orderModel?.data);
+
           final List<OrderedProduct>? listData  = getOrders.orderModel?.data;
-          return ListView.builder(
-              itemCount: listData?.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(12),
-                    elevation: 4,
-                    shadowColor: Colors.grey,
-                    child: Container(
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: Colors.white),
-                      height: _isExpand ? height*0.1 : null,
-                      width: width*0.8,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
+          if(listData == null) {
+            return CircularProgressIndicator();
+          }else if(isExpanded.length == 0){
+            return Center();
+          }
+          else {
+            return ListView.builder(
+                itemCount: listData.length,
+                itemBuilder: (context, index) {
+                  final orderData = listData[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Material(
+                      surfaceTintColor: Colors.pink,
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(12),
+                      elevation: 4,
+                      shadowColor: Colors.grey,
+                      child: Stack(
+                        children: [
+
+                          Container(
+                            //width: width*0.9,
+                              height: isExpanded[index] ? null : 83,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white
+                              ),
+                              child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Order No."),
-                                    Text(listData?[index].orderId.toString() ?? "")
-                                  ],
-                                ),
-                                //Expanded(child: Center(child: Text("hi"),)),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 17, bottom: 17, left: 12),
+                                          child: Column(
+                                            children: [
+                                              Text("Ordr No."),
+                                              Text("# ${orderData.orderId
+                                                  .toString()}"),
+                                            ],
+                                          ),
+                                        ),
 
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(onPressed: (){_isExpand == true;},
-                                    icon: Icon(Icons.keyboard_arrow_down_sharp))
-                              ],),
-                            // _isExpand == true ? expanded(orderId: listData?[index].orderId) : null ,
-                          ],
-                        ),
+                                        Padding(padding:
+                                        EdgeInsets.only(
+                                            top: 50,
+                                            left: 90,
+                                            bottom: 8),
+                                          child: Container(
+
+                                              child: GestureDetector(
+                                                  onTap: () {
+                                                    //Future.delayed(Duration(seconds: 5));
+                                                    setState(() {
+                                                      isExpanded[index] =
+                                                      !isExpanded[index];
+                                                    });
+                                                  },
+                                                  child: isExpanded[index]
+                                                      ? Icon(
+                                                      Icons
+                                                          .keyboard_arrow_up_sharp)
+                                                      : Icon(
+                                                      Icons
+                                                          .keyboard_arrow_down_sharp))),
+                                        ),
+
+                                        Spacer(),
+
+                                        Padding(
+
+                                          padding: const EdgeInsets.only(
+                                              right: 17, top: 26, bottom: 26),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                //color: getColor(widget.orderData.status),
+                                                  borderRadius: BorderRadius
+                                                      .all(
+                                                      Radius.circular(6)
+                                                  )
+                                              ),
+                                              child: Text(getOrders.orderModel
+                                                  ?.data?[index].orderStatus ??
+                                                  "",
+                                                style: GoogleFonts.istokWeb(
+                                                  fontSize: 14,
+                                                  //color: gettextColor(getOrders.orderModel?.data?[index].orderStatus ?? "")
+                                                ),)),
+                                        )
+                                      ],
+                                    ),
+                                    isExpanded[index] ? expanded(
+                                        orderId: orderData.orderId) : SizedBox
+                                        .shrink()
+                                  ])
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                );
-              });
+                  );
+                });
+          }
         }
     );
   }
+
   Widget expanded({required int orderId}){
     return Column(
       children: [
     //     if(isExpand)...[OrderDetailedView(
     // orderId: getOrders.orderModel?.data?[index].orderId ?? 0,
     // ),
-        OrderDetailedView(orderId: orderId),
-    SizedBox(height: 16),
-    OrderDeliveryAddress(orderId: orderId),
-    SizedBox(height: 16),
-    Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-    child: DeliveryPickupDetail(),
-    ),
+            OrderDetailedView(orderId: orderId,),
+            // SizedBox(height: 16),
+            //   OrderDeliveryAddress(orderId: orderId,),
+              SizedBox(height: 16),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DeliveryPickupDetail(),
+            ),
 
-    SizedBox(height: 16),
-    Padding(
-    padding: const EdgeInsets.only(bottom: 24),
-    //child: clickableButton(),
-    ),
-      ],
+            SizedBox(height: 16),
+              Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                     //child: clickableButton(),
+                    ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(onPressed: (){
+                      //isExpanded(false);
+                          //_isExpand;
+                      },icon: isExpanded == false ? Icon(Icons.keyboard_arrow_up) : Icon(null)),
+      ]
+        )]
     );
   }
 }
@@ -148,6 +233,6 @@ class _OrderListContainerState extends State<OrderListContainer> {
 // ElevatedButton(onPressed: (){
 // Provider.of<ParticularPickupItemNotifier>(context, listen: false)
 //     .getPickupData(deliveryPersonId: Helper.deliveryPersonId);
-// }, child: Text("click again")),
-// ],
+//    }, child: Text("click again")),
+//  ],
 // );

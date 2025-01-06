@@ -22,30 +22,24 @@ class ParticularDeliveryItemModel {
   factory ParticularDeliveryItemModel.fromJson(Map<String, dynamic> json) =>ParticularDeliveryItemModel(
     message: json["message"],
     error: json["error"],
-    data: json["data"] != null ?  Data.fromJson(json["data"]) : null,
+    data: json["data"] != null ? Data.fromJson(json["data"]) : null,
   );
-
-  // Map<String, dynamic> toJson() => {
-  //   "message": message,
-  //   "error": error,
-  //   "data": data.toJson(),
-  // };
 }
 
 class Data {
-  int? orderId;
-  int? sellerId;
-  int? customerId;
-  String? orderType;
-  String? orderStatus;
-  int? totalAmount;
-  String? paymentGateway;
-  String? paymentStatus;
+  int orderId;
+  int sellerId;
+  int customerId;
+  String orderType;
+  String orderStatus;
+  double totalAmount;
+  String paymentGateway;
+  String paymentStatus;
   List<OrderedProducts>? orderedProducts;
   BillingDetails? billingDetails;
   DeliveryDetails? deliveryDetails;
-  int? contactNumber;
-  String? createdAt;
+  int contactNumber;
+  DateTime? createdAt;
 
   Data({
     required this.orderId,
@@ -66,22 +60,20 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json)
       {
         final dateFormat = DateFormat("yyyy-MM-dd hh:mm:ss a");
-        return Data(
-          orderId: json["orderId"] = 0,
-          sellerId: json["sellerId"] = 0,
-          customerId: json["customerId"] = 0,
-          orderType: json["orderType"] = "",
-          orderStatus: json["orderStatus"] = "",
-          totalAmount: json["totalAmount"] = 0,
-          paymentGateway: json["paymentGateway"] = "",
+       try {
+      return Data(
+          orderId: json["orderId"] ?? 0,
+          sellerId: json["sellerId"] ?? 0,
+          customerId: json["customerId"] ?? 0,
+          orderType: json["orderType"] ?? "",
+          orderStatus: json["orderStatus"] ?? "",
+          totalAmount: (json["totalAmount"] ?? 0.0).toDouble(),
+          paymentGateway: json["paymentGateway"] ?? "",
           paymentStatus: json["paymentStatus"] = "",
           orderedProducts: json["orderedProducts"] != null
-              ? (json["orderedProducts"] is String
-                  ? List<OrderedProducts>.from(
-                      jsonDecode(json["orderedProducts"])
-                          .map((x) => OrderedProducts.fromJson(x)))
-                  : List<OrderedProducts>.from(json["orderedProducts"]
-                      .map((x) => OrderedProducts.fromJson(x))))
+              ? List<OrderedProducts>.from(
+                  (jsonDecode(json["orderedProducts"]) as List)
+                      .map((item) => OrderedProducts.fromJson(item)))
               : [],
           billingDetails: json["billingDetails"] != null
               ? (json["billingDetails"] is String
@@ -89,40 +81,26 @@ class Data {
                   : BillingDetails.fromJson(json["billingDetails"]))
               : null,
           deliveryDetails: json["deliveryDetails"] != null
-              ? (json["deliveryDetails"] is String
-                  ? DeliveryDetails.formJson(
-                      jsonDecode(json["deliveryDetails"]))
-                  : DeliveryDetails.formJson(json["deliveryDetails"]))
+              ? DeliveryDetails.formJson(jsonDecode(json["deliveryDetails"]))
               : null,
-          contactNumber: json["contactNumber"],
-          createdAt: json["createdAt"] ?? ""
-        );
-      }
-
-  // Map<String, dynamic> toJson() => {
-  //   "orderId": orderId,
-  //   "sellerId": sellerId,
-  //   "customerId": customerId,
-  //   "orderType": orderType,
-  //   "orderStatus": orderStatus,
-  //   "totalAmount": totalAmount,
-  //   "paymentGateway": paymentGateway,
-  //   "paymentStatus": paymentStatus,
-  //   "orderedProducts": orderedProducts,
-  //   "billingDetails": billingDetails,
-  //   "deliveryDetails": deliveryDetails,
-  //   "contactNumber": contactNumber,
-  //   "createdAt": createdAt,
-  // };
+          contactNumber: json["contactNumber"] ?? 0,
+          createdAt: DateTime.parse(json["createdAt"]));
+    }catch(e){
+         print("::::::::Exception in MainDAta as::::::::");
+         print(e);
+         rethrow;
+       }
+  }
 }
 
 //"orderedProducts": "[{\"productId\":1,\"productName\":\"Pineapple\",\"cartQty\":1,\"productQty\":\"2 kg\",\"price\":90}]",
 class OrderedProducts {
-  int? productId;
-  String? productName;
-  int? cartQty;
-  String? productQty;
-  int? price;
+
+  int productId;
+  String productName;
+  double cartQty;
+  String productQty;
+  double price;
 
   OrderedProducts({
     required this.productId,
@@ -132,25 +110,33 @@ class OrderedProducts {
     required this.price,
   });
 
-  factory OrderedProducts.fromJson(Map<String, dynamic> json) => OrderedProducts(
-      productId: json["productId"] = 0,
-      productName: json["productName"] = "",
-      cartQty: json["cartQty"] = 0,
-      productQty: json["productQty"] ="",
-      price: json["price"] = 0);
+  factory OrderedProducts.fromJson(Map<String, dynamic> json)  {
+    try{
+      return OrderedProducts(
+          productId: (json["productId"] ?? 0.0),
+          productName: json["productName"] ?? "",
+          cartQty: (json["cartQty"] ?? 0.0).toDouble(),
+          productQty: (json["productQty"] ?? ""),
+          price: (json["price"] ?? 0.0).toDouble());
+    }catch(e){
+      print(":::::Exception in OrderProduct Model::::::::::");
+      print(e);
+      rethrow;
+    }
+  }
 }
 
 //"billingDetails": "{\"paymentGateway\":\"cod\",\"deliveryCharge\":0,\"subtotal\":\"100356.00\",\"discount\":100266,\"total\":90,\"deliveryFee\":30,\"promoCodeUsed\":\"\",\"promoCodeDiscount\":0}",
 
 class BillingDetails{
-  String? paymentGateway;
-  int? deliveryCharge;
-  double? subtotal;
-  double? discount;
-  double? total;
-  double? deliveryFee;
+  String paymentGateway;
+  double deliveryCharge;
+  String subtotal;
+  String discount;
+  double total;
+  double deliveryFee;
   String? promoCodeUsed;
-  int? promoCodeDiscount;
+  String promoCodeDiscount;
 
   BillingDetails({
     required this.paymentGateway,
@@ -163,15 +149,25 @@ class BillingDetails{
     required this.promoCodeDiscount,
   });
 
-  factory BillingDetails.fromJson(Map<String,dynamic> json) => BillingDetails(
-      paymentGateway: json["paymentGateway"] = "",
-      deliveryCharge: json["deliveryCharge"] = 0,
-      subtotal: json["subtotal"] = 0.0,
-      discount: json["discount"] = 0.0 ,
-      total: json["total"] = 0.0,
-      deliveryFee: json["deliveryFee"] = 0.0,
-      promoCodeUsed: json["promoCodeUsed"] = "",
-      promoCodeDiscount: json["promoCodeDiscount"] = 0);
+  factory BillingDetails.fromJson(Map<String,dynamic> json) {
+    try{
+      return BillingDetails(
+          paymentGateway: json["paymentGateway"] ?? "",
+          deliveryCharge: (json["deliveryCharge"] ?? 0.0).toDouble(),
+          subtotal: (json["subtotal"]?.toString() ?? "0.0"),
+          discount: (json["discount"]?.toString() ?? "0.0"),
+          total: (json["total"] ?? 0.0).toDouble(),
+          deliveryFee: (json["deliveryFee"] ?? 0.0).toDouble(),
+          promoCodeUsed: json["promoCodeUsed"] ?? "",
+          promoCodeDiscount: (json["promoCodeDiscount"] is String)
+              ? json["promoCodeDiscount"] ?? ""
+              : json["promoCodeDiscount"].toString() ?? "");
+    }catch(e){
+      print("::::::::Exception at Billing details Model::::::::::");
+      print(e);
+      rethrow;
+    }
+  }
 }
 //"deliveryDetails": "{\"type\":\"Pickup\",\"deliveryOption\":\"\",\"expected\":\"2024-12-17 09:10:00 PM\",\"deliveryStatus\":\"pending\",\"address\":\"north street\"}",
 
@@ -193,13 +189,20 @@ class DeliveryDetails{
   factory DeliveryDetails.formJson(Map<String,dynamic> json) {
 
     final dateFormat = DateFormat("yyyy-MM-dd hh:mm:ss a");
-    return DeliveryDetails(
-        type: json["type"] = "",
-        deliveryOption: json["deliveryOption"] = "",
-        expected: json["expected"] != null
-            ? dateFormat.parse(json["expected"])
-            : DateTime.now(),
-        deliveryStatus: json["deliveryStatus"] = "",
-        address: json["address"] = "");
+    try{
+      return DeliveryDetails(
+          type: json["type"] = "",
+          deliveryOption: json["deliveryOption"] = "",
+          expected: json["expected"] != null
+              ? dateFormat.parse(json["expected"])
+              : DateTime.now(),
+          deliveryStatus: json["deliveryStatus"] = "",
+          address: json["address"] = "");
+    }catch(e){
+      print(":::::::Exception in DeliveryDetails::::::::");
+      print(e);
+      rethrow;
+    }
   }
 }
+
