@@ -38,4 +38,6 @@ class staticIcons{
   static String tick= "asset/svg_icons/tick.svg";
   static String phone= "asset/svg_icons/phone.svg";
   static String message= "asset/svg_icons/message.svg";
+
+  static String pending = "asset/svg_icons/pendings.svg";
 }

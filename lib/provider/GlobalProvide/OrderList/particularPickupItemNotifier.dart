@@ -26,11 +26,14 @@ class ParticularPickupItemNotifier extends ChangeNotifier{
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final deliveryId = prefs.getInt('deliveryPersonId') ?? 0;
     _particularPickupData = await particularPickupitem
-        .getPartiularItem(deliveryPersonId: deliveryId);
+        .getPartiularItem(deliveryPersonId: deliveryPersonId);
     notifyListeners();
 
     print("::::::::Success full message from particular pickup ItemDat:::::::::::");
     print(_particularPickupData?.message);
+    //   print(_particularPickupData?.error);
+    // print(_particularPickupData?.data?[0].orderStatus);
+    //   print(_particularPickupData?.data?[0].totalAmount);
   }catch(e){
   print(e);
   }finally{

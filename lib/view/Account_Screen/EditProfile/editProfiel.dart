@@ -57,9 +57,9 @@ class _EditProfieleState extends State<EditProfiele> {
       //profileInstance.fetchProfileImageApi();
 
 
-      WidgetsBinding.instance.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_) async{
         Provider.of<profileNotifier>(context, listen: false).fetchProfileDetailsApi();
-        Provider.of<profileNotifier>(context, listen: false).updateProfile(profileImage: selectImanage!);
+        await Provider.of<profileNotifier>(context, listen: false).updateProfile(profileImage: selectImanage!);
         
       final loginProvider = Provider.of<profileNotifier>(context, listen: false);
 

@@ -19,8 +19,7 @@ class OrderListContainer extends StatefulWidget {
 
 class _OrderListContainerState extends State<OrderListContainer> {
 
-  List<bool> isExpanded = [];
-
+  //List<bool> isExpanded = [];
 
   @override
   void initState() {
@@ -38,12 +37,12 @@ class _OrderListContainerState extends State<OrderListContainer> {
         await getOrdersNotifier.getAllOrders(deliveryPersonId: deliveryPersonId);
 
         // Initialize toggle states (isExpanded list)
-        final ordersCount = getOrdersNotifier.orderModel?.data?.length ?? 0;
-        print("Number of Orders: $ordersCount");
+        //final ordersCount = getOrdersNotifier.orderModel?.data?.length ?? 0;
+        //print("Number of Orders: $ordersCount");
 
-        setState(() {
-          isExpanded = List.generate(ordersCount, (_) => false);
-        });
+        // setState(() {
+        //   isExpanded = List.generate(ordersCount, (_) => false);
+        // });
       } catch (e) {
         print("Error in initState: $e");
       }
@@ -64,7 +63,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
 
   @override
   Widget build(BuildContext context) {
-    print(isExpanded);
+    //print(isExpanded);
 
     //print("The expanded checing $_isExpand");
     final height = MediaQuery.of(context).size.height;
@@ -73,9 +72,11 @@ class _OrderListContainerState extends State<OrderListContainer> {
     return Consumer<getOrders_Notifier>(
         builder: (context, getOrders, child) {
 
+          List<bool> isExpanded =getOrders.isExpanded;
           final List<OrderedProduct>? listData  = getOrders.orderModel?.data;
           if(listData == null) {
-            return CircularProgressIndicator();
+            return Center
+              (child: CircularProgressIndicator());
           }else if(isExpanded.length == 0){
             return Center();
           }
@@ -194,10 +195,10 @@ class _OrderListContainerState extends State<OrderListContainer> {
             // SizedBox(height: 16),
             //   OrderDeliveryAddress(orderId: orderId,),
               SizedBox(height: 16),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: DeliveryPickupDetail(),
-            ),
+            // Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            //     child: DeliveryPickupDetail(),
+            // ),
 
             SizedBox(height: 16),
               Padding(
@@ -209,10 +210,10 @@ class _OrderListContainerState extends State<OrderListContainer> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconButton(onPressed: (){
-                      //isExpanded(false);
-                          //_isExpand;
-                      },icon: isExpanded == false ? Icon(Icons.keyboard_arrow_up) : Icon(null)),
+            // IconButton(onPressed: (){
+            //           //isExpanded(false);
+            //               //_isExpand;
+            //           },icon: isExpanded == false ? Icon(Icons.keyboard_arrow_up) : Icon(null)),
       ]
         )]
     );

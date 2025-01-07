@@ -6,7 +6,7 @@ import '../../helper/helperClass.dart';
 
 class GetOrdersService extends UrlCollection{
 
-  Future<dynamic> getOrderService({required int deliveryPersonId, String? orderStatus, String? dateFilter}) async{
+  Future<dynamic> getOrderService({required int deliveryPersonId, String? orderStatus, DateTime? dateFilter}) async{
             final dio = Dio();
 
             try{

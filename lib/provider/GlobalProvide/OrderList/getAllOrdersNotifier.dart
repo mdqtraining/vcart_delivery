@@ -6,14 +6,18 @@ import '../../../Model/Orders/orders_getall.dart';
 import '../../../helper/helperClass.dart';
 import '../../../network/Service/GetOrdersService.dart';
 import '../../../network/Service/deliveryPersonProfile.dart';
+import '../../../network/Service/updateStatus.dart';
 
 class getOrders_Notifier extends ChangeNotifier{
   
   final GetOrdersService deliverySerivce = GetOrdersService();
+  final updateStatusService updateStatus = updateStatusService();
 
   OrdersData? _orderModel;
   OrdersData? get orderModel => _orderModel;
 
+  List<bool> _isExpanded = [];
+  List<bool> get isExpanded => _isExpanded;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -21,7 +25,7 @@ class getOrders_Notifier extends ChangeNotifier{
   String? _erroText;
   String? get errorText => _erroText;
 
-  Future getAllOrders({required int deliveryPersonId,String? orderStatus, String? dateFilter}) async{
+  Future getAllOrders({required int deliveryPersonId,String? orderStatus, DateTime? dateFilter}) async{
     
     _isLoading = true;
     notifyListeners();
@@ -39,18 +43,10 @@ class getOrders_Notifier extends ChangeNotifier{
         _erroText = "The form is incoreect";
         print("error found");
       } else {
+        final ordersCount = orderModel?.data?.length ?? 0;
+        _isExpanded = List.generate(ordersCount, (_) => false);
+        notifyListeners();
 
-        //ToDo: Task1 completed
-
-        // if(_orderModel?.data != null)
-        // {
-        //   for (var order in _orderModel!.data!) {
-        //     if (order.orderId != null) {
-        //       //Helper.orderId.add(order.orderId);
-        //       Helper.orderId = order.orderId;
-        //     }
-        //   }
-        // }
         print("The process was SuccessFull");
       }
     }catch(e){
@@ -60,6 +56,23 @@ class getOrders_Notifier extends ChangeNotifier{
     finally{
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future updateStatusNotifier({required int deliveryPersonId, required int orderID, required int orderStatus}) async{
+    try{
+
+      //final message;
+          await updateStatus.updateStatus(
+            deliveryPersonId: deliveryPersonId,
+            orderID: orderID,
+           orderStatus: orderStatus);
+
+         print("The process was completed successfully::::::::In updated Stat");
+
+    }catch(e){
+      print("No data Found:::::::::::::At Here::::::::::::>");
+      print(e);
     }
   }
 }
