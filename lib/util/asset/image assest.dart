@@ -1,7 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
-
 class staticImages{
   //advertisment
   static String man = "asset/images/man.png";
@@ -18,4 +14,7 @@ class staticImages{
   static String gallery = "asset/images/gallery.png";
   static String camera = "asset/images/camera.png";
   static String defalutProfile = "asset/images/defaultimage.png";
+
+  //static String forgetPassword = "asset/images/forgetPassword.png";
+  static String forgetPassword = "asset/images/forgot.png";
 }

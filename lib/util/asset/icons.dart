@@ -15,6 +15,7 @@ class staticIcons{
   static String share= "asset/svg_icons/share.svg";
   static String UseraltLight = "asset/svg_icons/User_alt_light.svg";
   static String Vector = "asset/svg_icons/Vector.svg";
+  static String Location = "asset/svg_icons/location.svg";
 
   //referScreen
   static String calender = "asset/svg_icons/calender.svg";
@@ -40,4 +41,5 @@ class staticIcons{
   static String message= "asset/svg_icons/message.svg";
 
   static String pending = "asset/svg_icons/pendings.svg";
+
 }

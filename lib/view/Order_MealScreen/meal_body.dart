@@ -5,11 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../app_components/delivery_pickup_detail.dart';
 import '../../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
 import '../../provider/GlobalProvide/OrderList/particularPickupItemNotifier.dart';
-import 'extended_content.dart';
-import '../../Model/OrderMealModel/meal_page_model.dart';
+
 
 class MealBody extends StatefulWidget {
 
@@ -87,21 +85,24 @@ class _MealBodyState extends State<MealBody> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(pickData[index].shopName ?? ""),
-                            Spacer(),
-                            GestureDetector(
-                                onTap: (){launch('tel: ${pickData[index].contactNumber}');},
-                                child: SvgPicture.asset(staticIcons.call)),
-                            SizedBox(width: 8),
-                            SvgPicture.asset(staticIcons.share),
-                          ],
+                      Container(
+                        color: Colors.blue,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(pickData[index].shopName ?? ""),
+                              Spacer(),
+                              GestureDetector(
+                                  onTap: (){launch('tel: ${pickData[index].contactNumber}');},
+                                  child: SvgPicture.asset(staticIcons.call)),
+                              SizedBox(width: 8),
+                              SvgPicture.asset(staticIcons.Location,height: 32, width: 32,),
+                            ],
+                          ),
                         ),
                       ),
 
@@ -172,8 +173,8 @@ class _MealBodyState extends State<MealBody> {
                                     left: 4, right: 10),
                                 child: SvgPicture.asset(staticIcons.user_black),
                               ),
-
-                              Text( "name need to display here",
+                              //ToDo: need to customer name here,
+                              Text( "Ganesh",
                                 style: GoogleFonts.istokWeb(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w800,
@@ -207,42 +208,14 @@ class _MealBodyState extends State<MealBody> {
                           ],
                           ),
 
-
                           SizedBox(height: 4,),
                           Padding(padding: EdgeInsets.only(left: 45),
                             child: Text(pickData[index].sellerAddress ?? ""),),
 
                           SizedBox(height: 22),
 
-                          // Row(children: [
-                          //   Padding(
-                          //     padding: const EdgeInsets.only(left: 8, right: 8),
-                          //     child: SvgPicture.asset(
-                          //         staticIcons.Vector),
-                          //   ),
-                          //   Text("Delivery",
-                          //     style: GoogleFonts.istokWeb(
-                          //         fontSize: 16,
-                          //         fontWeight: FontWeight.w400,
-                          //         color: Colors.black
-                          //     ),),
-                          //   Spacer(),
-                          //   Padding(
-                          //     padding: const EdgeInsets.only(right: 16.0),
-                          //     child: SvgPicture.asset(
-                          //         staticIcons.call),
-                          //   ),
-                          //   SvgPicture.asset(staticIcons.share)
-                          // ],
-                          // ),
-                          //
-                          // Padding(padding: EdgeInsets.only(left: 45),
-                          //   child: Text("patinam paakam"),),
-
-                          //SizedBox(height: 16),
-                          //Order delivery Detail........
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -359,68 +332,29 @@ class _MealBodyState extends State<MealBody> {
                                                       child: Text(value), // Display the value
                                                     );
                                                   }).toList(),
-                                                  onChanged: (String? newValue) {
-                                                    setState(() {
-                                                      selectedValue = newValue; // Update the selected value
-                                                    });
-                                                    Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
-                                                        deliveryPersonId: 1, orderID: 1, orderStatus: 19);
+                                                  onChanged: (String? newValue) async{
 
-                                                    Provider.of<getOrders_Notifier>(context,listen: false);
+                                                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                    final deliverypersonId = prefs.getInt('deliveryPersonId');
+
+                                                    selectedValue = await newValue;
+                                                    setState(() {
+                                                     selectedValue = newValue; // Update the selected value
+                                                    });
+                                                    print(deliverypersonId);
+                                                    print(pickData[index].orderId);
+                                                    print(statusId(selectedValue ?? ""));
+
+                                                    Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
+                                                        deliveryPersonId: deliverypersonId ?? 0, orderID: pickData[index].orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
+
+                                                    await Provider.of<ParticularPickupItemNotifier>(context,listen: false).getPickupData(deliveryPersonId: deliverypersonId ?? 0);
                                                   },
                                                 ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        //DropdownMenu(dropdownMenuEntries: dropdownMenuEntries)
-
-                              //             Center(
-                              //                   child: DropdownButton<String>(
-                              //                     value: _selectedStatus, // Current value
-                              //                      items: _orderStatus.map((String status) {
-                              //                       return DropdownMenuItem<String>(
-                              //         value: status,
-                              //         child: Text(status),
-                              //       );
-                              //     }).toList(),
-                              //     onChanged: (String? newValue) {
-                              //       setState(() {
-                              //         _selectedStatus = newValue!;
-                              //       });
-                              //     },
-                              //     underline: Container(
-                              //       height: 2,
-                              //       color: Colors.blueAccent,
-                              //     ),
-                              //     dropdownColor: Colors.white,
-                              //   ),
-                              // ),
-
-                                        // Container(
-                                        //   height: 32,
-                                        //   width: 165,
-                                        //   decoration: BoxDecoration(
-                                        //       color: Colors.white,
-                                        //       borderRadius: BorderRadius.all(Radius.circular(10)),
-                                        //       border: Border.all(
-                                        //         color: Color(0x44FF5963),
-                                        //         width: 1,
-                                        //       )
-                                        //             ),
-                                        //            child: Padding(
-                                        //               padding: const EdgeInsets.only(left: 8,right: 8),
-                                        //               child: Row(
-                                        //                 mainAxisAlignment: MainAxisAlignment.center,
-                                        //                 children: [
-                                        //                           Text("Select option"),
-                                        //                           Spacer(),
-                                        //                           Icon(Icons.keyboard_arrow_down_sharp)
-                                        //                         ],
-                                        //                     ),
-                                        //                   ),
-                                        //                 )
+                                                            ),
+                                                           ),
+                                                         ],
+                                                        ),
                                                       ],
                                                     )
                                                   ],
@@ -447,11 +381,12 @@ class _MealBodyState extends State<MealBody> {
           }
         );
       } //: CircularProgressIndicator()
-    );
+     );
   }
 
  String? selectedValue;
-  List<String> status = ["Out for Pickup",
+  List<String> status = [
+    "Out for Pickup",
     "Out For Delivery",
     "Failed Delivery Attempt",
     "Delivered",
@@ -459,20 +394,44 @@ class _MealBodyState extends State<MealBody> {
     "Address Issue",
     "Delivery Rescheduled"];
 
+  int? statusId(String status){
+    status = status.toLowerCase();
+    switch(status){
+      case 'out for pickup':
+        return 16;
+      case 'out for delivery':
+        return 17;
+      case 'failed delivery attempt':
+        return 18;
+      case 'delivered':
+        return 19;
+      case 'delivery Failed':
+        return 20;
+      case 'address issue':
+        return 21;
+      case 'delivery rescheduled':
+        return 22;
+    };
+  }
+
   Color? getColor(String status){
     status = status.toLowerCase();
     switch(status){
-      case 'pickup pending':
+      case 'out for pickup':
         return Color(0x33FF5963);
-      case 'pickup failed':
-        return Color(0x33FC5862);
-      case 'delivery pending':
-        return Color(0x33FC5862);
-      case 'delivery failed':
-        return Color(0x33FC5862);
-      case 'pickup rescheduled':
-        return Color(0x3397C8FF);
       case 'delivery reschedule':
+        return Color(0x33FC5862);
+      case 'failed delivery attempt':
+        return Color(0x33FC5862);
+      case 'delivery Failed':
+        return Color(0x33FC5862);
+      case 'delivery rescheduled':
+        return Color(0x33FC5862);
+      case 'delivered':
+        return Color(0x3397C8FF);
+      case 'out for delivery':
+        return Color(0x3397C8FF);
+      case 'pending':
         return Color(0x3397C8FF);
     };
   }
@@ -483,7 +442,7 @@ class _MealBodyState extends State<MealBody> {
     switch(status){
       case 'delivery pending' && 'pickup pending' && 'pickup failed' && 'delivery failed':
         return Color(0xFFE81F2B);
-      case 'pickup rescheduled' && 'delivery reschedule':
+        case 'pickup rescheduled' && 'delivery reschedule':
         return Color(0xFF0050AA);
     };
   }

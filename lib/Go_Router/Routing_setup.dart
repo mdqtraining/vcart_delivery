@@ -1,15 +1,14 @@
 import 'package:eatfit_delivery_partner/Go_Router/routeDefination.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-//import '../view/OnBoardingScreen/onBoardingScreen.dart';
 import '../app_components/bottomNavigation.dart';
 import '../view/Account_Screen/AskForLeave/ask_for_leave.dart';
 import '../view/Account_Screen/AskForLeave/ask_for_leave_sumbited/submitted_screen.dart';
 import '../view/Account_Screen/EditProfile/editProfiel.dart';
 import '../view/Account_Screen/ReferAndEarn/refer_and_earn_screen.dart';
+import '../view/LoginScreen/Forget password/forgetPasswrodScreen.dart';
 import '../view/LoginScreen/Login_Input/LoginScreen.dart';
 import '../view/LoginScreen/Login_Successfull/login_successfull.dart';
-import '../view/LoginScreen/Login_VerificationScreen/otp_verification_Screen.dart';
 import '../view/OnBoardingScreen/onBoardingScreen.dart';
 import '../view/SplashScreen/splashScreen.dart';
 import '../view/account_Screen_Scaffold.dart';
@@ -41,12 +40,9 @@ class AppRouter {
               return MaterialPage(child: LoginScreen());
             }),
 
-        //OnBoardingScreenSecond
-        GoRoute(path: pageRoute.Login_verification,
+        GoRoute(path: pageRoute.forget_password,
             pageBuilder: (context,state){
-              final String verificationId = state.extra.toString();
-              return MaterialPage(
-                  child: LoginVerification());
+              return MaterialPage(child: ForgetPasswordScreen());
             }),
 
         // //onScussess

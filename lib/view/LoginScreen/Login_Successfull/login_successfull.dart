@@ -25,14 +25,14 @@ class _onSucssessState extends State<onSucssess> {
   }
 
   void _startAnimation() async{
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 3));
     setState(() {
       showFirstAnimation = false;
     });
   }
 
   void _showText() async{
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 3));
     setState(() {
       showSuccessText = true;
     });
@@ -57,7 +57,7 @@ class _onSucssessState extends State<onSucssess> {
           children: [
             Container(
               child: showFirstAnimation ?
-              Lottie.asset(animations.giftbox, width: 150,height: width*0.18) :
+              Lottie.asset(animations.giftbox, width: width*0.41,height: height*0.18) :
 
               Lottie.asset(animations.tickMark,repeat: false),
 

@@ -8,8 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../Model/OrderStoerModel/list_data.dart';
 import '../../provider/GlobalProvide/OrderList/particularDeliveryItemNotifier.dart';
 
 class OrderDetailedView extends StatefulWidget {

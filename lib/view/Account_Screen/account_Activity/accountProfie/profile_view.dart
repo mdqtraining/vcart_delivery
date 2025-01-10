@@ -21,9 +21,8 @@ class _Account_ProfileState extends State<Account_Profile> {
 
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<profileNotifier>(context, listen: false)
-          .fetchProfileDetailsApi();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<profileNotifier>(context, listen: false).fetchProfileDetailsApi();
       final loginProvider = Provider.of<profileNotifier>(context, listen: false);
       //if(loginProvider != )
     });

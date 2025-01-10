@@ -31,14 +31,11 @@ class ParticularPickupItemNotifier extends ChangeNotifier{
 
     print("::::::::Success full message from particular pickup ItemDat:::::::::::");
     print(_particularPickupData?.message);
-    //   print(_particularPickupData?.error);
-    // print(_particularPickupData?.data?[0].orderStatus);
-    //   print(_particularPickupData?.data?[0].totalAmount);
-  }catch(e){
-  print(e);
-  }finally{
-  _isLoading = false;
-  notifyListeners();
-  }
+    }catch(e){
+         print(e);
+       }finally{
+            _isLoading = false;
+             notifyListeners();
+      }
   }
 }

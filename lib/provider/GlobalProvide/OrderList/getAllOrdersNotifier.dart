@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../Model/OrderStoerModel/list_data.dart';
 import '../../../Model/Orders/orders_getall.dart';
-import '../../../helper/helperClass.dart';
 import '../../../network/Service/GetOrdersService.dart';
-import '../../../network/Service/deliveryPersonProfile.dart';
 import '../../../network/Service/updateStatus.dart';
 
 class getOrders_Notifier extends ChangeNotifier{

@@ -1,4 +1,5 @@
 import 'package:eatfit_delivery_partner/provider/GlobalProvide/LoginChangeNotifierl.dart';
+import 'package:eatfit_delivery_partner/util/asset/string.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,26 +19,22 @@ class SplashScreen extends StatefulWidget  {
 
 class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMixin{
 
-  void nextPage() async{
+  void splashNavigator() async{
 
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 4));
+
     final prefs = await SharedPreferences.getInstance();
-    final hasViewedOnboarding = prefs.getBool('hasViewedOnboarding') ?? false;
-    final splashProvider = Provider.of<LoginProvider>(context,listen: false);
-    final checkingcredential = Provider.of<profileNotifier>(context,listen: false);
-    final loginInstance = splashProvider.logindata;
-    final profileInstance = profileNotifier();
-    final login = await prefs.getString('bearerToken');
+    final hasViewedOnboarding = prefs.getBool(NamingStrings.viwedSplashScreen) ?? false;
+    final bearerToken = prefs.getString(NamingStrings.bearerToken);
 
     if (!hasViewedOnboarding) {
       if(mounted){
         context.go(pageRoute.onboarding);
       } // Navigate to onboarding
     }
-    else if(login == null) {
+    else if(bearerToken == null) {
       if(mounted){
         context.go(pageRoute.Login_input);
-        print(loginInstance?.data?.bearerToken);
       } // Navigate to login
      }
     else {
@@ -48,9 +45,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
   @override
   Widget build(BuildContext context) {
 
-    final a = Provider.of<LoginProvider>(context,listen: false);
-
-    nextPage();
+    splashNavigator();
     return Scaffold(
         body: Stack(
             children: [

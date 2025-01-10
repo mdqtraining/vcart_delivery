@@ -11,4 +11,5 @@ class pageRoute{
   static String referScreen = "refer";
   static String askForLeave = "askforLeave";
   static String askForLeave_success = "success";
+  static String forget_password = "/forgetPasswod";
 }

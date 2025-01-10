@@ -49,6 +49,10 @@ dependencies:
   intl: ^0.18.0
   url_launcher: ^6.3.1
   weekly_date_picker: ^1.4.2
+  fluttertoast: ^8.2.10
+  toggle_switch: ^2.3.0
+  table_calendar: ^3.0.9
+
   # cupertino_calendar_picker: ^2.1.2
 
 dev_dependencies:

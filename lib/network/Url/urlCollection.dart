@@ -7,5 +7,7 @@ class UrlCollection{
   static String deliveryOrderList = baseUrl+'deliveryperson/order/get-all';
   static String particularDeliveryItemList = baseUrl+'deliveryperson/order/get';
   static String updateStatus = baseUrl+'deliveryperson/order/update-status';
+  static String forgetPassword = baseUrl+'deliveryperson/forgot-password';
+
   static String particularPickupDetail = 'https://mdqualityapps.in/API/gross_shop/development/deliveryperson/order/get-orders-seller';
 }

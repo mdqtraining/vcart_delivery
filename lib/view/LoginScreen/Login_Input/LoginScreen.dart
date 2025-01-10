@@ -1,13 +1,16 @@
 import 'package:eatfit_delivery_partner/provider/GlobalProvide/LoginChangeNotifierl.dart';
+import 'package:eatfit_delivery_partner/util/asset/animation.dart';
 import 'package:eatfit_delivery_partner/util/asset/image%20assest.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
+//import 'package:fluttertoast/fluttertoast.dart';
 import '../../../Go_Router/routeDefination.dart';
 import '../../../Model/AccountLogin/loginModel.dart';
-import 'countryCodeSelector.dart';
+import '../../../app_components/countryCodeSelector.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -49,19 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-
-
-  // void initState() {// ->Needs to cover the coceptv
-  //   super.initState();
-  //   final login = Login(deliveryPersonPassword: password_controller.text,//int.parse(password_controller.text),
-  //       deliveryPersonMobile: mobileNumber_controller.text, //int.parse(mobileNumber_controller.text)
-  //   );
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     Provider.of<LoginProvider>(context, listen: false).login(login);
-  //   });
-  // }
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -69,7 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
     double width = MediaQuery.of(context).size.width;
 
     final loginProvider = Provider.of<LoginProvider>(context);
-    //var watch = context
 
     return Scaffold(
       body: SafeArea(
@@ -89,15 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             gradient: LinearGradient(
                                 colors: [
                                   Color(0xFFFFE8D6),
-                                  //Color(0x61FC848B),
                                   Color(0xFFFF6B74),
-
                                 ],
                                 begin: Alignment.bottomLeft,
                                 end: Alignment.topRight),
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.elliptical(0, 15),
-                                bottomRight: Radius.elliptical(150, 60))),
+                                borderRadius: BorderRadius.only(
+                                   bottomLeft: Radius.elliptical(0, 15),
+                                   bottomRight: Radius.elliptical(150, 60))),
                       ),
 
                       Positioned(
@@ -138,9 +125,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 26),
+                        padding: const EdgeInsets.only(left: 16),
                         child: Text(
-                          "Enter Mobile Number",
+                          "Enter Mobile Number & Password",
                           style: GoogleFonts.radioCanada(
                             fontSize: 18, //WidthSize*0.045,
                             fontWeight: FontWeight.normal,
@@ -150,13 +137,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: height * 0.02),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.06, vertical: height * 0),
+                            horizontal: width * 0.04),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CountryCodeSelector(),
+                            SizedBox(width: 6.4,),
                             Container(
-                              height: 50,
-                              width: 280,
+                              height: height*0.06,
+                              width: width*0.73,
                               child: TextField(
                                 controller: mobileNumber_controller,
                                 maxLength: 10,
@@ -185,9 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       borderSide: BorderSide(
                                           color: Colors.orange, width: 2.0)),
 
-                                  hintText: "e.g. 9999988888",
-                                  hintStyle: GoogleFonts.radioCanada(
-                                      fontSize: 11,
+                                  hintText: "E.g. 99999 88888",
+                                  hintStyle: GoogleFonts.inter(
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.grey),
                                 ),
@@ -201,9 +191,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.06, vertical: height * 0),
+                            horizontal: width * 0.04, vertical: height * 0),
                         child: Container(
-                          height: 50,
+                          height: height*0.06,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12)
                           ),
@@ -234,9 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderSide: BorderSide(
                                       color: Colors.orange, width: 2.0)),
 
-                              hintText: "enter Password",
-                              hintStyle: GoogleFonts.radioCanada(
-                                  fontSize: 11,
+                              hintText: "Enter Password",
+                              hintStyle: GoogleFonts.inter(
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey),
                             ),
@@ -244,9 +234,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
 
-                      SizedBox(height: height * 0.01),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(onPressed: (){
+                            context.push(pageRoute.forget_password);
+                          },
+                              child: Text("Forgot Password?")),
+                          SizedBox(width: 6,)
+                        ],
+                      ),
+
+                      //SizedBox(height: height * 0.01),
+
                       Padding(
-                        padding: const EdgeInsets.only(left: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           children: [
                             Checkbox(
@@ -274,34 +277,41 @@ class _LoginScreenState extends State<LoginScreen> {
                                             fontWeight: FontWeight.normal,
                                             color: Color(0xFFFF5963)),
                                       ),
-                                      TextSpan(
-                                        text: "and",
-                                        style: GoogleFonts.radioCanada(
-                                            fontSize: 14, //WidthSize*0.035,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black),
-                                      )
+
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  "Privacy Policy.",
-                                  style: GoogleFonts.radioCanada(
-                                      fontSize: 14, //WidthSize*0.035,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFFFF5963)),
+                                Row(
+                                  children: [
+
+                                    Text(
+                                      "and ",
+                                      style: GoogleFonts.radioCanada(
+                                          fontSize: 14, //WidthSize*0.035,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.black),
+                                    ),
+
+                                    Text(
+                                      "Privacy Policy.",
+                                      style: GoogleFonts.radioCanada(
+                                          fontSize: 14, //WidthSize*0.035,
+                                          fontWeight: FontWeight.normal,
+                                          color: Color(0xFFFF5963)),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.01),
 
-                      if(loginProvider.isLoading)
-                        CircularProgressIndicator()
-                      else...
-                      [
+                      //if(loginProvider.isLoading)
+                      //   Container()//CircularProgressIndicator()
+                      // else...
+                      //[
                         Center(
                         child: Container(
                           //constraints: ,
@@ -310,13 +320,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           child: ElevatedButton(
                             onPressed: () async {
-                              print("the button clicked");
-                              print("login_mobile>>>");
-                              print(mobileNumber_controller.text);
-                              print("login_password>>>");
-                              print(password_controller.text);
-                              await provider.loginAPI(mobileNumber: mobileNumber_controller.text,
-                                  password: password_controller.text, context: context);
+
+                              if(_isClicked == true) {
+
+                                await provider.loginAPI(
+                                    mobileNumber: mobileNumber_controller.text,
+                                    password: password_controller.text,
+                                    context: context);
+
+                              }else{_showToast(context, "Agree Privacy Policy", Colors.white,Colors.black);}
+
+                              if(provider.logindata?.error == true) {
+                                print("::::::::::::::::true or False::::::::::::");
+                                print(provider.logindata?.error);
+                                _showToast(
+                                    context,
+                                    provider.logindata?.message ?? "Something went Wrong",
+                                    Colors.white,Colors.black);
+                              }else{
+                                print("::::::::::::::::::::::::::::::::::::::::::");
+                                print(provider.logindata?.message);
+                                _showToast(
+                                    context,
+                                    provider.logindata?.message ?? "no data found",
+                                    Colors.green,
+                                    Colors.white);
+                              }
                             },
 
                             style: ElevatedButton.styleFrom(
@@ -339,28 +368,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     30), // Rounded edges
                               ),
                             ),
-                            child: _isLoading
-                                ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(
-                                    strokeWidth: 2.0,
-                                    color: Color(0xFFFF5963)),
-                                SizedBox(width: 24),
-                                Text(
-                                  "Progressing",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 18, // WidthSize*0.05,
-                                    color: _isLoading
-                                        ? Color(0xFFFF5963)
-                                        : Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            )
+                            child: loginProvider.isLoading == true
+                                ? //if(loginProvider.isLoading)
+                                  LottieBuilder.asset(
+                                    animations.loadingWhite,
+                                    height: 40,
+                                    width: 40,
+                                    fit: BoxFit.contain,)
                                 : Text(
-                              "Send OTP",
+                              "Log In",
                               style: GoogleFonts.inter(
                                 fontSize: 18, // WidthSize*0.05,
                                 color: Colors.white,
@@ -369,7 +385,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                      ),]
+                      ), // ]
                     ],
                   ),
                 ],
@@ -380,38 +396,30 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  void _showToast(BuildContext context,String addtext) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text(addtext),
-        action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
-      ),
+  void _showToast(BuildContext context,String addtext,Color color,Color textcolor) {
+    //final scaffold = ScaffoldMessenger.of(context);
+    //Container(child:  )
+    Fluttertoast.showToast(
+      msg: addtext,
+
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      backgroundColor: color,
+      textColor: textcolor,
+      fontSize: 16
     );
   }
+
+  // void showToast(String message) {
+  //   Fluttertoast.showToast(
+  //     msg: message,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.BOTTOM, // Position: TOP, CENTER, or BOTTOM
+  //     backgroundColor: Colors.black,
+  //     textColor: Colors.white,
+  //     fontSize: 16.0,
+  //   );
+  // }
+
 }
 
-
-
-// String enteredText = mobileNumber_controller.text;
-//
-// if (enteredText.length < 10) {
-//   errorAttempt();
-//   mobilNumberError(
-//       "Entered mobile number was wrong");
-//       _showToast(contex,"entered value is wrong");
-//   return;
-// }
-// if (_isClicked == false) {
-//   errorAttempt();
-//   mobilNumberError(
-//       "Aggree to the policy");
-//   _showToast(context, "policy agree");
-//   return;
-// }
-// final login = Login(
-//   deliveryPersonMobileNumber: mobileNumber_controller.text,//int.parse(mobileNumber_controller.text),
-//   deliveryPersonPassword: password_controller.text,
-// );
-// String mobile = mobileNumber_controller.text;
-//String password = password_controller.text;
