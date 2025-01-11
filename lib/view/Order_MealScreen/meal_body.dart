@@ -2,6 +2,7 @@ import 'package:eatfit_delivery_partner/util/asset/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,7 @@ class _MealBodyState extends State<MealBody> {
       builder: (context,getOrders,child){
 
         final pickData = getOrders.particularPickupData?.data;
-        if(pickData == null || pickData.isEmpty){
+        if(pickData == null || pickData.isEmpty ){
           return Center(
             child: Text('No orders available'),
           );
@@ -62,6 +63,8 @@ class _MealBodyState extends State<MealBody> {
           return Center(child: CircularProgressIndicator());
         }
         print(pickData.isEmpty);
+
+
         return ListView.builder(
           itemCount: pickData.length,
           itemBuilder: (context,index) {
@@ -86,11 +89,17 @@ class _MealBodyState extends State<MealBody> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        color: Colors.blue,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            topLeft: Radius.circular(8)
+                          ),
+                          color: Color(0xFFFFF5ED),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16),
-                          child: Row(
+                          child:Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -102,16 +111,16 @@ class _MealBodyState extends State<MealBody> {
                               SizedBox(width: 8),
                               SvgPicture.asset(staticIcons.Location,height: 32, width: 32,),
                             ],
-                          ),
+                          )
                         ),
                       ),
 
-                      Divider(
-                        thickness: 1,
-                        indent: 0,
-                        endIndent: 0,
-                        color: Color(0xFF4A5568),
-                      ),
+                      // Divider(
+                      //   thickness: 1,
+                      //   indent: 0,
+                      //   endIndent: 0,
+                      //   color: Color(0xFF4A5568),
+                      // ),
 
                           InkWell(
                             onTap: () {
@@ -122,7 +131,7 @@ class _MealBodyState extends State<MealBody> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 4),
+                                  horizontal: 16, vertical: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,15 +183,17 @@ class _MealBodyState extends State<MealBody> {
                                 child: SvgPicture.asset(staticIcons.user_black),
                               ),
                               //ToDo: need to customer name here,
-                              Text( "Ganesh",
+                              Text( pickData[index].sellerName == ""
+                                  ? "Default name"
+                                  : pickData[index].sellerName.toString(),
                                 style: GoogleFonts.istokWeb(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.black
                                 ),),
-                              SizedBox(width: 38,),
-                              SvgPicture.asset(
-                                  staticIcons.call)
+                              // SizedBox(width: 38,),
+                              // SvgPicture.asset(
+                              //     staticIcons.call)
                             ],
                           ),
                           SizedBox(height: 16,),
@@ -199,12 +210,7 @@ class _MealBodyState extends State<MealBody> {
                                   color: Colors.black
                               ),),
                             Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: SvgPicture.asset(
-                                  staticIcons.call),
-                            ),
-                            SvgPicture.asset(staticIcons.share)
+
                           ],
                           ),
 
@@ -345,10 +351,9 @@ class _MealBodyState extends State<MealBody> {
                                                     print(pickData[index].orderId);
                                                     print(statusId(selectedValue ?? ""));
 
-                                                    Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
-                                                        deliveryPersonId: deliverypersonId ?? 0, orderID: pickData[index].orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
 
-                                                    await Provider.of<ParticularPickupItemNotifier>(context,listen: false).getPickupData(deliveryPersonId: deliverypersonId ?? 0);
+
+                                                    //await Provider.of<ParticularPickupItemNotifier>(context,listen: false).getPickupData(deliveryPersonId: deliverypersonId ?? 0);
                                                   },
                                                 ),
                                                             ),
@@ -361,7 +366,47 @@ class _MealBodyState extends State<MealBody> {
                                                 ),
                                               ),
                                             ),
-                                          )
+                                          ),
+                                SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+
+                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        final deliverypersonId = prefs.getInt('deliveryPersonId');
+
+
+                                        await Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
+                                            deliveryPersonId: deliverypersonId ?? 0, orderID: pickData[index].orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
+
+                                        await Provider.of<ParticularPickupItemNotifier>(context,listen: false).getPickupData(deliveryPersonId: deliverypersonId ?? 0);
+                                        isExpanded[index] = false;
+                                      },
+
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor : Color(0xFFFF5963), // Button color
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 50,
+                                          vertical: 15,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(30), // Rounded edges
+                                        ),
+                                      ),
+                                      child:
+                                      Text(
+                                        "Confirm",
+                                        style: GoogleFonts.inter(
+                                          fontSize: 18, // WidthSize*0.05,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                         ],
                                       ),
                                     ),
@@ -405,6 +450,7 @@ class _MealBodyState extends State<MealBody> {
         return 18;
       case 'delivered':
         return 19;
+        //ToDo: checl
       case 'delivery Failed':
         return 20;
       case 'address issue':
@@ -423,7 +469,7 @@ class _MealBodyState extends State<MealBody> {
         return Color(0x33FC5862);
       case 'failed delivery attempt':
         return Color(0x33FC5862);
-      case 'delivery Failed':
+      case 'delivery failed':
         return Color(0x33FC5862);
       case 'delivery rescheduled':
         return Color(0x33FC5862);

@@ -22,6 +22,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
 
   //List<bool> isExpanded = [];
 
+  List functions = [];
   @override
   void initState() {
     super.initState(); // Always call super.initState first
@@ -38,12 +39,14 @@ class _OrderListContainerState extends State<OrderListContainer> {
         await getOrdersNotifier.getAllOrders(deliveryPersonId: deliveryPersonId);
 
         // Initialize toggle states (isExpanded list)
-        //final ordersCount = getOrdersNotifier.orderModel?.data?.length ?? 0;
+        final orders = getOrdersNotifier.orderModel?.data ?? [];
+        final ordersCount = orders.length;
         //print("Number of Orders: $ordersCount");
 
         // setState(() {
-        //   isExpanded = List.generate(ordersCount, (_) => false);
+        //   functions = List.generate(ordersCount, (_) => expanded(orderId: or));
         // });
+
       } catch (e) {
         print("Error in initState: $e");
       }
@@ -64,9 +67,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
 
   @override
   Widget build(BuildContext context) {
-    //print(isExpanded);
 
-    //print("The expanded checing $_isExpand");
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
@@ -89,97 +90,106 @@ class _OrderListContainerState extends State<OrderListContainer> {
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Material(
-                      surfaceTintColor: Colors.pink,
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(12),
-                      elevation: 4,
-                      shadowColor: Colors.grey,
-                      child: Stack(
-                        children: [
+                    child: InkWell(
+                        onTap: () {
+                          //Future.delayed(Duration(seconds: 5));
+                          setState(() {
+                            isExpanded[index] =
+                            !isExpanded[index];
+                          });
+                        },
+                      child: Material(
+                        surfaceTintColor: Colors.pink,
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 4,
+                        shadowColor: Colors.grey,
+                        child: Stack(
+                          children: [
 
-                          Container(
-                            //width: width*0.9,
-                              height: isExpanded[index] ? null : 83,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white
-                              ),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 17, bottom: 17, left: 12),
-                                          child: Column(
-                                            children: [
-                                              Text("Ordr No."),
-                                              Text("# ${orderData.orderId
-                                                  .toString()}"),
-                                            ],
+                            Container(
+                              //width: width*0.9,
+                                height: isExpanded[index] ? null : 83,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white
+                                ),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 17, bottom: 17, left: 12),
+                                            child: Column(
+                                              children: [
+                                                Text("Ordr No."),
+                                                Text("# ${orderData.orderId
+                                                    .toString()}"),
+                                              ],
+                                            ),
                                           ),
-                                        ),
 
-                                        Padding(padding:
-                                        EdgeInsets.only(
-                                            top: 50,
-                                            left: 90,
-                                            bottom: 8),
-                                          child: Container(
+                                          Padding(padding:
+                                          EdgeInsets.only(
+                                              top: 50,
+                                              left: 90,
+                                              bottom: 8),
+                                            child: Container(
 
-                                              child: GestureDetector(
-                                                  onTap: () {
-                                                    //Future.delayed(Duration(seconds: 5));
-                                                    setState(() {
-                                                      isExpanded[index] =
-                                                      !isExpanded[index];
-                                                    });
-                                                  },
-                                                  child: isExpanded[index]
-                                                      ? Icon(
-                                                      Icons
-                                                          .keyboard_arrow_up_sharp)
-                                                      : Icon(
-                                                      Icons
-                                                          .keyboard_arrow_down_sharp))),
-                                        ),
+                                                // child: GestureDetector(
+                                                //     onTap: () {
+                                                //       //Future.delayed(Duration(seconds: 5));
+                                                //       setState(() {
+                                                //         isExpanded[index] =
+                                                //         !isExpanded[index];
+                                                //       });
+                                                //     },
+                                                //     child: isExpanded[index]
+                                                //         ? Icon(
+                                                //         Icons
+                                                //             .keyboard_arrow_up_sharp)
+                                                //         : Icon(
+                                                //         Icons
+                                                //             .keyboard_arrow_down_sharp))
+                                            ),
+                                          ),
 
-                                        Spacer(),
+                                          Spacer(),
 
-                                        Padding(
+                                          Padding(
 
-                                          padding: const EdgeInsets.only(
-                                              right: 17, top: 26, bottom: 26),
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                color: getColor(getOrders.orderModel
-                                                    ?.data?[index].orderStatus ?? ""),
-                                                  borderRadius: BorderRadius
-                                                      .all(
-                                                      Radius.circular(6)
-                                                  )
-                                              ),
-                                              child: Text(getOrders.orderModel
-                                                  ?.data?[index].orderStatus ??
-                                                  "",
-                                                style: GoogleFonts.istokWeb(
-                                                  fontSize: 14,
-                                                  //color: gettextColor(getOrders.orderModel?.data?[index].orderStatus ?? "")
-                                                ),)),
-                                        )
-                                      ],
-                                    ),
-                                    isExpanded[index] ? expanded(
-                                        orderId: orderData.orderId,
-                                        //orderStatus: listData[index].orderStatus
-                                    ) : SizedBox
-                                        .shrink()
-                                  ])
-                          ),
-                        ],
+                                            padding: const EdgeInsets.only(
+                                                right: 17, top: 26, bottom: 26),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: getColor(getOrders.orderModel
+                                                      ?.data?[index].orderStatus ?? ""),
+                                                    borderRadius: BorderRadius
+                                                        .all(
+                                                        Radius.circular(6)
+                                                    )
+                                                ),
+                                                child: Text(getOrders.orderModel
+                                                    ?.data?[index].orderStatus ??
+                                                    "",
+                                                  style: GoogleFonts.istokWeb(
+                                                    fontSize: 14,
+                                                    //color: gettextColor(getOrders.orderModel?.data?[index].orderStatus ?? "")
+                                                  ),)),
+                                          )
+                                        ],
+                                      ),
+                                      isExpanded[index] ?
+                                      expanded(orderId: listData[index].orderId)
+                                          : SizedBox
+                                          .shrink()
+                                    ])
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -192,27 +202,11 @@ class _OrderListContainerState extends State<OrderListContainer> {
   Widget expanded({required int orderId,}){   //required String orderStatus
     return Column(
       children: [
-    //     if(isExpand)...[OrderDetailedView(
-    // orderId: getOrders.orderModel?.data?[index].orderId ?? 0,
-    // ),
-            OrderDetailedView(orderId: orderId,),
-            // SizedBox(height: 16),
-            //   OrderDeliveryAddress(orderId: orderId,),
-              SizedBox(height: 16),
-            // Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            //     child: DeliveryPickupDetail(),
-            // ),
 
-            SizedBox(height: 16),
-              Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                     //child: clickableButton(),
-                    ),
-
-
+        OrderDetailedView(orderId: orderId,),
+        SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -346,10 +340,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
                                               //print(pickData[index].orderId);
                                               print(statusId(selectedValue ?? ""));
 
-                                              Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
-                                                  deliveryPersonId: deliverypersonId ?? 0, orderID: orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
-
-                                              await Provider.of<getOrders_Notifier>(context,listen: false).getAllOrders(deliveryPersonId: deliverypersonId ?? 0);//.getAllOrders(deliveryPersonId: deliverypersonId ?? 0);
+                                              //.getAllOrders(deliveryPersonId: deliverypersonId ?? 0);
                                             },
                                           ),
                                         ),
@@ -364,19 +355,53 @@ class _OrderListContainerState extends State<OrderListContainer> {
                     ),
                   ),
                 ),
-              )
+              ),
+
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      final deliverypersonId = prefs.getInt('deliveryPersonId');
+
+
+                      await Provider.of<getOrders_Notifier>(context,listen: false).updateStatusNotifier(
+                          deliveryPersonId: deliverypersonId ?? 0, orderID: orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
+
+                      await Provider.of<getOrders_Notifier>(context,listen: false).getAllOrders(deliveryPersonId: deliverypersonId ?? 0);
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor : Color(0xFFFF5963), // Button color
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30), // Rounded edges
+                      ),
+                    ),
+                    child:
+                    Text(
+                      "Confirm",
+                      style: GoogleFonts.inter(
+                        fontSize: 18, // WidthSize*0.05,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
         //Button needs to placed......
       ],
     );
-    // ],
-    // ),
-    // )
-    //
-    //    ]
-    // );
   }
 
   String? selectedValue;

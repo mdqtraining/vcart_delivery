@@ -41,6 +41,7 @@ class getOrders_Notifier extends ChangeNotifier{
       } else {
         final ordersCount = orderModel?.data?.length ?? 0;
         _isExpanded = List.generate(ordersCount, (_) => false);
+
         notifyListeners();
 
         print("The process was SuccessFull");

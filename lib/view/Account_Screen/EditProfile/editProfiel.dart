@@ -26,15 +26,12 @@ class _EditProfieleState extends State<EditProfiele> {
 
   TextEditingController firstName_controller = TextEditingController();
   TextEditingController lastName_controller = TextEditingController();
-  //TextEditingController fatherName_controller = TextEditingController();
   TextEditingController primaryMobileNumber_controller = TextEditingController();
   TextEditingController whatsAppMobileNumber_controller = TextEditingController();
   TextEditingController bloodGroup_controller = TextEditingController();
   TextEditingController cityName_controller = TextEditingController();
   TextEditingController address_controller = TextEditingController();
   TextEditingController emailId = TextEditingController();
-
-  //final loginInstatnce = LoginModel(message: "", error: true, data: null);
 
   bool isClicked = false;
 
@@ -44,20 +41,12 @@ class _EditProfieleState extends State<EditProfiele> {
     });
   }
 
-  //LoginProvider? loginProvider;
-  //LoginModel? loginData;
-
-
-  //var userProvider = Provider.of<LoginProvider>(context,listen: false);
   @override
   void initState() {
       super.initState();
 
-      //final profileInstance = profileNotifier();
-      //profileInstance.fetchProfileImageApi();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
 
-
-      WidgetsBinding.instance.addPostFrameCallback((_) async{
         Provider.of<profileNotifier>(context, listen: false).fetchProfileDetailsApi();
         await Provider.of<profileNotifier>(context, listen: false).updateProfile(profileImage: selectImanage!);
         
@@ -100,15 +89,6 @@ class _EditProfieleState extends State<EditProfiele> {
                 leading: Icon(Icons.arrow_back_ios_new_outlined),
                 title: Text("Edit Profile"),
                 centerTitle: true,
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: GestureDetector(
-                        onTap: () {},
-                        child: SvgPicture.asset(
-                          staticIcons.tick, color: Colors.black,)),
-                  )
-                ],
               ),
 
               body: loginProvider.profileData?.data != null ?
@@ -124,7 +104,7 @@ class _EditProfieleState extends State<EditProfiele> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //Text("Edit Profiel"),
+
                                 Center(
                                     child: Stack(
                                       children: [
@@ -167,6 +147,7 @@ class _EditProfieleState extends State<EditProfiele> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0),
                                   child: textField(firstName_controller,
+
                                       "nothing great"),
                                 ),
 
@@ -271,22 +252,25 @@ class _EditProfieleState extends State<EditProfiele> {
     Container textField(TextEditingController controller_name,String hintText,
         {TextInputType inputType = TextInputType.text}){
     return Container(
-      height:MediaQuery.of(context).size.height*0.068,
+      height:MediaQuery.of(context).size.height*0.06,
       width: MediaQuery.of(context).size.width,
       child: TextField(
         controller: controller_name,
+        textCapitalization: TextCapitalization.words,
+        style: GoogleFonts.inter(
+          fontWeight: FontWeight.w400,
+          color: Colors.grey,
+          //fontFeatures: [FontFeature.]
+        ),
         keyboardType: inputType,
         readOnly: true,
         decoration: InputDecoration(
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),),
-         // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+
           disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey)),
-          errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2.0)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.orange, width: 2.0)),
+
           hintText: hintText,
           hintStyle: GoogleFonts.radioCanada(
             fontWeight: FontWeight.w400,
@@ -297,10 +281,10 @@ class _EditProfieleState extends State<EditProfiele> {
     ));
   }
   TextStyle fontdesign(){
-    return GoogleFonts.istokWeb(
+    return GoogleFonts.inter(
       fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: Color(0xFF57585A),
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:eatfit_delivery_partner/util/asset/image%20assest.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -92,7 +93,7 @@ successful delivery. """,
                 Positioned(
                     right: 16,
                     top:30,
-                    child: Image.asset("assets/images/advertisment/man.png"))
+                    child: Image.asset(staticImages.man))
               ],
             ),
         ),

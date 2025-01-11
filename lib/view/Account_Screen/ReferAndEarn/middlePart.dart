@@ -1,3 +1,4 @@
+import 'package:eatfit_delivery_partner/util/asset/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,7 @@ class MiddleContent extends StatelessWidget {
             child: Column(
               children: [Row(
                 children: [
-                  SvgPicture.asset("assets/svg_icons/refer/invite.svg_icons"),
+                  SvgPicture.asset(staticIcons.invite),
                   SizedBox(width: 16,),
                   Text("Invite your friends to EatFit",
                   style: GoogleFonts.istokWeb(
@@ -34,7 +35,7 @@ class MiddleContent extends StatelessWidget {
 
                 Row(
                   children: [
-                    SvgPicture.asset("assets/svg_icons/refer/referal.svg_icons"),
+                    SvgPicture.asset(staticIcons.referal),
                     SizedBox(width: 16,),
                     Text("Your friend uses your referral code",
                       style: GoogleFonts.istokWeb(
@@ -45,11 +46,11 @@ class MiddleContent extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 6,),
+                SizedBox(height: 6),
 
                 Row(
                   children: [
-                    SvgPicture.asset("assets/svg_icons/refer/gift.svg_icons"),
+                    SvgPicture.asset(staticIcons.referal),
                     SizedBox(width: 16,),
                     Text("You get Rs. 75 in your wallet",
                       style: GoogleFonts.istokWeb(

@@ -57,6 +57,8 @@ class _OrderDetailedViewState extends State<OrderDetailedView> {
 
           final particularData = getParticularItem.particularItemData?.data;
           final products = particularData?.orderedProducts;
+
+
           if(particularData == null) {
             return CircularProgressIndicator();
           }else {
@@ -157,7 +159,7 @@ class _OrderDetailedViewState extends State<OrderDetailedView> {
                           SvgPicture.asset(staticIcons.Vector),
                           Text("Delivery"),
                           Spacer(),
-                          SvgPicture.asset(staticIcons.share)
+                          SvgPicture.asset(staticIcons.Location)
                         ],
                       ),
                       particularData.deliveryDetails!.address!.isNotEmpty?Text(

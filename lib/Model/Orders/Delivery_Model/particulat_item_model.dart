@@ -191,13 +191,13 @@ class DeliveryDetails{
     final dateFormat = DateFormat("yyyy-MM-dd hh:mm:ss a");
     try{
       return DeliveryDetails(
-          type: json["type"] = "",
-          deliveryOption: json["deliveryOption"] = "",
+          type: json["type"] ?? "",
+          deliveryOption: json["deliveryOption"] ?? "",
           expected: json["expected"] != null
               ? dateFormat.parse(json["expected"])
               : DateTime.now(),
-          deliveryStatus: json["deliveryStatus"] = "",
-          address: json["address"] = "");
+          deliveryStatus: json["deliveryStatus"] ?? "",
+          address: json["address"] ?? "");
     }catch(e){
       print(":::::::Exception in DeliveryDetails::::::::");
       print(e);

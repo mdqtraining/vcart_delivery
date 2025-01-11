@@ -1,4 +1,5 @@
 import 'package:eatfit_delivery_partner/Go_Router/routeDefination.dart';
+import 'package:eatfit_delivery_partner/util/asset/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,7 @@ class accountModel{
 
     return[
       accountModel(
-        leading: SvgPicture.asset("asset/svg_icons/user_black.svg"),
+        leading: SvgPicture.asset(staticIcons.user),
         title: "Edit Profile",
         onClicked: (){},
         navigation: "${pageRoute.accountScreen}/${pageRoute.editProfile}"//context.go("${pageRoute.accountScreen}/${pageRoute.editProfile}"),

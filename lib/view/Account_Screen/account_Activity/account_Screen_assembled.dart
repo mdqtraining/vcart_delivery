@@ -20,72 +20,81 @@ class _AccountBodyContentState extends State<AccountBodyContent> {
   Widget build(BuildContext context) {
     final accountData = accountModel.accountContent(context);
     return Container(
-      margin: EdgeInsets.only(right: 16,left: 16,top: 8,bottom: 0),
-      child: Column(
+      margin: EdgeInsets.only(right: 8,left: 8,top: 8,bottom: 0),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: Column(
 
-        children: [
-          //Account Profile
-          Account_Profile(),
+          children: [
+            //Account Profile
+            Account_Profile(),
 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text("Options",
-                style: GoogleFonts.plusJakartaSans(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black
-                ),),
-              ),
-            ],
-          ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Expanded(
+                //   child: Text("Options",
+                //   style: GoogleFonts.plusJakartaSans(
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 18,
+                //     color: Colors.black
+                //   ),),
+                //),
+              ],
+            ),
 
-          SizedBox(height: 8,),
-          Expanded(child: ListView.builder(
-            itemCount: accountData.length,
-            itemBuilder: (context, index) {
-              final item = accountData[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0), // Spacing between tiles
-                child: Material(
-                  color: Colors.white, // Background color of the tile
-                  elevation: 4, // Adds shadow to the tile
-                  borderRadius: BorderRadius.circular(8),
-                  // Rounded corners
-                  child: InkWell(
-                    onTap: () { context.push(item.navigation); } ,
-                    child: Ink(
-                      height: 54,
-                      padding: const EdgeInsets.only(left: 8,right: 16), // Inner padding
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Leading widget
-                          if (item.leading != null) item.leading!,
-                          // Title
-                          SizedBox(width: 18,),
-                          Expanded(
-                            child: Text(
-                              item.title ?? "",
-                              style: const TextStyle(fontSize: 16),
-                              overflow: TextOverflow.ellipsis, // Handle long text
+            SizedBox(height: 8,),
+            Expanded(child: ListView.builder(
+              itemCount: accountData.length,
+              itemBuilder: (context, index) {
+                final item = accountData[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0), // Spacing between tiles
+                  child: Material(
+                    color: Colors.white, // Background color of the tile
+                    elevation: 1, // Adds shadow to the tile
+                    borderRadius: BorderRadius.circular(8),
+
+                    // Rounded corners
+                    child: InkWell(
+                      onTap: () { context.push(item.navigation); } ,
+                      child: Container(
+
+                        height: 54,
+                        padding: const EdgeInsets.only(left: 16,right: 16), // Inner padding
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Leading widget
+                            if (item.leading != null) item.leading!,
+                            // Title
+                            SizedBox(width: 32,),
+                            Expanded(
+                              child: Text(
+                                item.title ?? "",
+                                style:  GoogleFonts.inter(
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400
+                                ),
+                                overflow: TextOverflow.ellipsis, // Handle long text
+                              ),
                             ),
-                          ),
-                          // Trailing icon
-                          SvgPicture.asset(
-                            staticIcons.arrowRight,
-                          ),
-                        ],
+                            // Trailing icon
+                            SvgPicture.asset(
+                              staticIcons.arrowRight,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-          )
-        ],
+                );
+              },
+            ),
+            )
+          ],
+        ),
       ),
     );
   }

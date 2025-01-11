@@ -38,8 +38,15 @@ class _HomeScreenStore1State extends State<HomeScreenStore1> {
       });
   }
 
+  late List<Widget> pages;
+
+  vanakambuddy(){
+    pages = [ maelPage(), storePage(), delivered()];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final a = vanakambuddy();
     return Scaffold(
       backgroundColor: Color(0xFFE8E8E8),
       appBar: CommonAppBar(lead: false),
@@ -86,9 +93,11 @@ class _HomeScreenStore1State extends State<HomeScreenStore1> {
 
                   Flexible(
                     //fit: FlexFit.loose,
-                    child: _selectedTab == 0
-                     ? maelPage() // Display Meal page content
-                     : storePage(),)
+                    child: pages[_selectedTab],
+                    // child: _selectedTab == 0
+                    //  ? maelPage() // Display Meal page content
+                    //  : storePage(),
+                  )
                 ],
               ) ,
             ),
@@ -109,10 +118,17 @@ Container maelPage(){
         child: MealBody(),
     );
   }
+
+  Container delivered(){
+    return Container(
+      child: MealBody(),
+    );
+  }
+
   Widget calender(){
     DateTime selectedDate = DateTime.now();
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         if(_calenderButtonClicked == false) {
           calenderButtonClicked(true);
         }else{
@@ -188,19 +204,19 @@ Container maelPage(){
 
           PopupMenuItem(
               value: 'Out For Delivery',
-              child: Text("delivery pending")),
+              child: Text("Out For Deilvery")),
 
           PopupMenuItem(
               value: 'Out for Pickup',
-              child: Text("pickup pending")),
+              child: Text("Out For Pickup")),
 
           PopupMenuItem(
               value: 'Delivery Failed',
-              child: Text("failed delivery")),
+              child: Text("Delivery Failed")),
 
           PopupMenuItem(
               value: 'Delivery Rescheduled',
-              child: Text("delivery rescheduled")),
+              child: Text("Delivery Rescheduled")),
 
           PopupMenuItem(
               value: 'Delivered',

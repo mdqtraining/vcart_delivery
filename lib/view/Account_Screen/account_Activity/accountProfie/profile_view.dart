@@ -31,17 +31,20 @@ class _Account_ProfileState extends State<Account_Profile> {
   Widget build(BuildContext context) {
 
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Consumer<profileNotifier>(
       builder: (context,profileUpdater,value) =>
       profileUpdater.profileData?.data != null ?
        Container(
         margin: EdgeInsets.only(bottom: 16),
-        width: 355,
+        width: width,
         child:Row(
           children: [
             Expanded(
-              child: Row(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
                       radius: width * 0.14,
@@ -51,73 +54,17 @@ class _Account_ProfileState extends State<Account_Profile> {
                   ),
                   SizedBox(width: 16),
 
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: SvgPicture.asset(staticIcons.user),
-                              ),
-                              Text(profileUpdater.profileData!.data!.firstName,
-                              style: GoogleFonts.istokWeb(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),),
-                              Spacer(),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                                  color: Colors.white,
-                                ),
-                                child:
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("4.9"),
-                                    SizedBox(width: 4),
-                                    SvgPicture.asset(staticIcons.star)
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                  Text(profileUpdater.profileData!.data!.firstName,
+                    style: GoogleFonts.istokWeb(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),),
 
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: SvgPicture.asset(staticIcons.phone),
-                            ),
-                            Text(profileUpdater.profileData!.data!.mobileNumber,
-                              style: GoogleFonts.istokWeb(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),),
-                          ],
-                        ),
-
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: SvgPicture.asset(staticIcons.message),
-                            ),
-                            Text(profileUpdater.profileData!.data!.email,
-                              style: GoogleFonts.istokWeb(
-                                fontSize: profileUpdater.profileData!.data!.email.length > 20 ? 12 :16,
-                                fontWeight: FontWeight.normal,
-
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]
-                    ),
-                  ),
+                  Text(profileUpdater.profileData!.data!.mobileNumber,
+                    style: GoogleFonts.istokWeb(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),),
                 ],
               ),
             )
@@ -127,3 +74,75 @@ class _Account_ProfileState extends State<Account_Profile> {
     );
   }
 }
+
+
+
+
+
+// Expanded(
+//   child: Column(
+//     mainAxisAlignment: MainAxisAlignment.start,
+//     children: [
+//         Row(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.only(right: 8.0),
+//               child: SvgPicture.asset(staticIcons.user),
+//             ),
+//             Text(profileUpdater.profileData!.data!.firstName,
+//             style: GoogleFonts.istokWeb(
+//               fontSize: 16,
+//               fontWeight: FontWeight.normal,
+//             ),),
+//             Spacer(),
+//             Container(
+//               padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.all(Radius.circular(50)),
+//                 color: Colors.white,
+//               ),
+//               child:
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Text("4.9"),
+//                   SizedBox(width: 4),
+//                   SvgPicture.asset(staticIcons.star)
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//
+//       Row(
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.only(right: 8.0),
+//             child: SvgPicture.asset(staticIcons.phone),
+//           ),
+//           Text(profileUpdater.profileData!.data!.mobileNumber,
+//             style: GoogleFonts.istokWeb(
+//               fontSize: 16,
+//               fontWeight: FontWeight.normal,
+//             ),),
+//         ],
+//       ),
+//
+//       Row(
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.only(right: 8.0),
+//             child: SvgPicture.asset(staticIcons.message),
+//           ),
+//           Text(profileUpdater.profileData!.data!.email,
+//             style: GoogleFonts.istokWeb(
+//               fontSize: profileUpdater.profileData!.data!.email.length > 20 ? 12 :16,
+//               fontWeight: FontWeight.normal,
+//
+//             ),
+//           ),
+//         ],
+//       ),
+//     ]
+//   ),
+// ),

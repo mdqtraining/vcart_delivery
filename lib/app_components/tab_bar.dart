@@ -25,9 +25,11 @@ class _TabBarCustomState extends State<TabBarCustom> {
 
   @override
   Widget build(BuildContext context) {
+  final height = MediaQuery.of(context).size.height;
+  final width = MediaQuery.of(context).size.width;
     return Container(
-      height: 32,
-      width: 182,
+      height: height * 0.0375,
+      width: width*0.5,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -40,8 +42,8 @@ class _TabBarCustomState extends State<TabBarCustom> {
 
             },
             child: Container(
-              height: 32,
-              width: 91,
+              height: height * 0.0375,
+              width: width * 0.16,
               decoration: BoxDecoration(
                 color: _selectedIndex == 0 ? Color(0xFFFF5963) : Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -50,7 +52,7 @@ class _TabBarCustomState extends State<TabBarCustom> {
                 child: Text(
                   "PickUp",
                   style: GoogleFonts.inter(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: _selectedIndex == 0 ? Colors.white : Colors.black,
                   ),
@@ -63,8 +65,8 @@ class _TabBarCustomState extends State<TabBarCustom> {
               _onItemTapped(1);
             },
             child: Container(
-              height: 32,
-              width: 91,
+              height: height * 0.0375,
+              width: width * 0.16,
               decoration: BoxDecoration(
                 color: _selectedIndex == 1 ? Color(0xFFFF5963) : Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -73,9 +75,34 @@ class _TabBarCustomState extends State<TabBarCustom> {
                 child: Text(
                   "Delivery",
                   style: GoogleFonts.inter(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: _selectedIndex == 1 ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          GestureDetector(
+            onTap: () {
+              _onItemTapped(2);
+
+            },
+            child: Container(
+              height: height * 0.0375,
+              width: width * 0.16,
+              decoration: BoxDecoration(
+                color: _selectedIndex == 2 ? Color(0xFFFF5963) : Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              child: Center(
+                child: Text(
+                  "Delivered",
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: _selectedIndex == 2 ? Colors.white : Colors.black,
                   ),
                 ),
               ),
