@@ -91,7 +91,7 @@ class _TabBarCustomState extends State<TabBarCustom> {
             },
             child: Container(
               height: height * 0.0375,
-              width: width * 0.16,
+              width: width * 0.18,
               decoration: BoxDecoration(
                 color: _selectedIndex == 2 ? Color(0xFFFF5963) : Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(50)),

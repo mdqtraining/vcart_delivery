@@ -1,13 +1,10 @@
-import 'package:eatfit_delivery_partner/Model/Orders/orders_getall.dart';
-import 'package:eatfit_delivery_partner/helper/helperClass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../app_components/delivery_pickup_detail.dart';
+import '../../Model/Orders/deliverPending_model.dart';
 import '../../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
-
 import 'order_detailed_view.dart';
 
 class OrderListContainer extends StatefulWidget {
@@ -20,9 +17,6 @@ class OrderListContainer extends StatefulWidget {
 
 class _OrderListContainerState extends State<OrderListContainer> {
 
-  //List<bool> isExpanded = [];
-
-  List functions = [];
   @override
   void initState() {
     super.initState(); // Always call super.initState first
@@ -37,15 +31,6 @@ class _OrderListContainerState extends State<OrderListContainer> {
         // Fetch orders
         final getOrdersNotifier = Provider.of<getOrders_Notifier>(context, listen: false);
         await getOrdersNotifier.getAllOrders(deliveryPersonId: deliveryPersonId);
-
-        // Initialize toggle states (isExpanded list)
-        final orders = getOrdersNotifier.orderModel?.data ?? [];
-        final ordersCount = orders.length;
-        //print("Number of Orders: $ordersCount");
-
-        // setState(() {
-        //   functions = List.generate(ordersCount, (_) => expanded(orderId: or));
-        // });
 
       } catch (e) {
         print("Error in initState: $e");
@@ -75,7 +60,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
         builder: (context, getOrders, child) {
 
           List<bool> isExpanded =getOrders.isExpanded;
-          final List<OrderedProduct>? listData  = getOrders.orderModel?.data;
+          final List<DeliverPendingModeldata>? listData  = getOrders.deliveryPending?.data;
           if(listData == null) {
             return Center
               (child: CircularProgressIndicator());
@@ -132,49 +117,20 @@ class _OrderListContainerState extends State<OrderListContainer> {
                                             ),
                                           ),
 
-                                          Padding(padding:
-                                          EdgeInsets.only(
-                                              top: 50,
-                                              left: 90,
-                                              bottom: 8),
-                                            child: Container(
-
-                                                // child: GestureDetector(
-                                                //     onTap: () {
-                                                //       //Future.delayed(Duration(seconds: 5));
-                                                //       setState(() {
-                                                //         isExpanded[index] =
-                                                //         !isExpanded[index];
-                                                //       });
-                                                //     },
-                                                //     child: isExpanded[index]
-                                                //         ? Icon(
-                                                //         Icons
-                                                //             .keyboard_arrow_up_sharp)
-                                                //         : Icon(
-                                                //         Icons
-                                                //             .keyboard_arrow_down_sharp))
-                                            ),
-                                          ),
-
                                           Spacer(),
-
                                           Padding(
 
                                             padding: const EdgeInsets.only(
                                                 right: 17, top: 26, bottom: 26),
                                             child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: getColor(getOrders.orderModel
-                                                      ?.data?[index].orderStatus ?? ""),
+                                                  color: getColor(orderData.orderStatus),
                                                     borderRadius: BorderRadius
                                                         .all(
                                                         Radius.circular(6)
                                                     )
                                                 ),
-                                                child: Text(getOrders.orderModel
-                                                    ?.data?[index].orderStatus ??
-                                                    "",
+                                                child: Text(orderData.orderStatus,
                                                   style: GoogleFonts.istokWeb(
                                                     fontSize: 14,
                                                     //color: gettextColor(getOrders.orderModel?.data?[index].orderStatus ?? "")
@@ -444,7 +400,7 @@ class _OrderListContainerState extends State<OrderListContainer> {
         return Color(0x33FC5862);
       case 'failed delivery attempt':
         return Color(0x33FC5862);
-      case 'delivery Failed':
+      case 'delivery failed':
         return Color(0x33FC5862);
       case 'delivery rescheduled':
         return Color(0x33FC5862);
@@ -457,21 +413,3 @@ class _OrderListContainerState extends State<OrderListContainer> {
     };
   }
 }
-
-
-
-
-// return Column(
-// children: [
-// ElevatedButton(onPressed: (){
-// Provider.of<GetParticularDeliveryItem>(context,listen: false)
-//     .getDeliveryItem(deliveryPersonId: Helper.deliveryPersonId,
-// orderId: getOrders.orderModel?.data?[0].orderId ?? 0);
-// }, child: Text("click here")),
-//
-// ElevatedButton(onPressed: (){
-// Provider.of<ParticularPickupItemNotifier>(context, listen: false)
-//     .getPickupData(deliveryPersonId: Helper.deliveryPersonId);
-//    }, child: Text("click again")),
-//  ],
-// );

@@ -3,18 +3,12 @@ import 'package:eatfit_delivery_partner/provider/GlobalProvide/OrderList/getAllO
 import 'package:eatfit_delivery_partner/provider/GlobalProvide/OrderList/particularDeliveryItemNotifier.dart';
 import 'package:eatfit_delivery_partner/provider/GlobalProvide/OrderList/particularPickupItemNotifier.dart';
 import 'package:eatfit_delivery_partner/provider/GlobalProvide/profileNotifier.dart';
-import 'package:eatfit_delivery_partner/view/Account_Screen/EditProfile/editProfiel.dart';
-import 'package:eatfit_delivery_partner/view/Account_Screen/account_Activity/accountProfie/profile_view.dart';
 import 'package:eatfit_delivery_partner/view/Account_Screen/account_Activity/account_Screen_assembled.dart';
-import 'package:eatfit_delivery_partner/view/LoginScreen/Forget%20password/forgetPasswrodScreen.dart';
-import 'package:eatfit_delivery_partner/view/LoginScreen/Login_Input/LoginScreen.dart';
-import 'package:eatfit_delivery_partner/view/LoginScreen/Login_Successfull/login_successfull.dart';
 import 'package:eatfit_delivery_partner/view/account_Screen_Scaffold.dart';
-import 'package:eatfit_delivery_partner/view/order_Screen._Scaffold.dart';
-import 'package:eatfit_delivery_partner/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Go_Router/Routing_setup.dart';
+import 'app_components/bottomNavigation.dart';
 
 void main() async{
   runApp(const MyApp());
@@ -34,15 +28,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ParticularPickupItemNotifier()),
       ],
 
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'EatFit_Delivery',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        //routerConfig: AppRouter().router,
-       home:MyAccountMain(),
+        routerConfig: AppRouter().router,
+       //home:MainRouteStarts(),
       ),
     );
   }

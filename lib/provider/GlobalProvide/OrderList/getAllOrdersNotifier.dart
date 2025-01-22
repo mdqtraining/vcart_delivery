@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../Model/Orders/deliverPending_model.dart';
+import '../../../Model/Orders/delivered_details.dart';
 import '../../../Model/Orders/orders_getall.dart';
 import '../../../network/Service/GetOrdersService.dart';
 import '../../../network/Service/updateStatus.dart';
@@ -11,6 +13,12 @@ class getOrders_Notifier extends ChangeNotifier{
 
   OrdersData? _orderModel;
   OrdersData? get orderModel => _orderModel;
+
+  DeliveredData? _deliveredData;
+  DeliveredData? get deliveredData => _deliveredData;
+
+  DeliverPendingModel? _deliveryPending;
+  DeliverPendingModel? get deliveryPending => _deliveryPending;
 
   List<bool> _isExpanded = [];
   List<bool> get isExpanded => _isExpanded;
@@ -39,10 +47,56 @@ class getOrders_Notifier extends ChangeNotifier{
         _erroText = "The form is incoreect";
         print("error found");
       } else {
+
         final ordersCount = orderModel?.data?.length ?? 0;
         _isExpanded = List.generate(ordersCount, (_) => false);
 
         notifyListeners();
+
+        final filteredList = orderModel?.data!
+            .where((order) => order.orderStatus?.toLowerCase() == "delivered")
+            .map((order) => DeliveredOrderedProduct(
+
+          orderId: order.orderId,
+          deliveryPersonId: order.deliveryPersonId,
+          sellerId: order.sellerId,
+          customerId: order.customerId,
+          orderStatus: order.orderStatus ?? "vanakam da mapla",
+          totalAmount: order.totalAmount,
+          paymentGateway: order.paymentGateway,
+          paymentStatus: order.paymentStatus,
+          contactNumber: order.contactNumber,
+          createdAt: order.createdAt,
+        )).toList();
+
+        _deliveredData ??= DeliveredData(message: '',error: false,data: []); // Ensure it's initialized
+        _deliveredData?.data = filteredList;
+        notifyListeners();
+
+        final deliverPendingFiltered = orderModel?.data!
+            .where((order) => order.orderStatus.toLowerCase() != "out for pickup" &&
+            order.orderStatus?.toLowerCase() != "delivered" &&
+            order.orderStatus?.toLowerCase() != "failed delivery attempt")
+            .map((order) => DeliverPendingModeldata(
+          orderId: order.orderId,
+          deliveryPersonId: order.deliveryPersonId,
+          sellerId: order.sellerId,
+          customerId: order.customerId,
+          orderStatus: order.orderStatus ,
+          totalAmount: order.totalAmount,
+          paymentGateway: order.paymentGateway,
+          paymentStatus: order.paymentStatus,
+          contactNumber: order.contactNumber,
+          createdAt: order.createdAt,
+        )).toList();
+
+        _deliveryPending ??= DeliverPendingModel(message: '',error: false,data: []); // Ensure it's initialized
+        _deliveryPending?.data = deliverPendingFiltered;
+        notifyListeners();
+
+        print("::::::::::::Output from Notifier:::::::::::::::::::");
+        print(deliveredData?.data?.first.orderStatus);
+
 
         print("The process was SuccessFull");
       }

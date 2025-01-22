@@ -8,6 +8,7 @@ import '../app_components/tab_bar.dart';
 import '../app_components/topAppBar.dart';
 import '../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
 import 'Order_MealScreen/meal_body.dart';
+import 'delivered list/deliveredScreen.dart';
 
 class HomeScreenStore1 extends StatefulWidget {
 
@@ -121,18 +122,21 @@ Container maelPage(){
 
   Container delivered(){
     return Container(
-      child: MealBody(),
+      child: DeliveredList(),
     );
   }
 
   Widget calender(){
-    DateTime selectedDate = DateTime.now();
+    //DateTime selectedDate = DateTime.now();
     return GestureDetector(
       onTap: () async {
         if(_calenderButtonClicked == false) {
           calenderButtonClicked(true);
         }else{
           calenderButtonClicked(false);
+          final SharedPreferences pref = await SharedPreferences.getInstance();
+          final deliveryPersonId = pref.getInt('deliveryPersonId');
+          Provider.of<getOrders_Notifier>(context,listen: false).getAllOrders(deliveryPersonId: deliveryPersonId ?? 0);
         }
       },
       child: Container(
@@ -167,12 +171,15 @@ Container maelPage(){
           // Highlight the selected day
           return isSameDay(_selectedDay, day);
         },
-        onDaySelected: (selectedDay, focusedDay) {
+        onDaySelected: (selectedDay, focusedDay) async{
           setState(() {
             _selectedDay = selectedDay;
             _focusedDay = selectedDay;
           });
           print(_selectedDay);
+          final SharedPreferences pref = await SharedPreferences.getInstance();
+          final deliveryPersonId = pref.getInt('deliveryPersonId');
+          Provider.of<getOrders_Notifier>(context,listen: false).getAllOrders(deliveryPersonId: deliveryPersonId ?? 0,dateFilter: selectedDay);
         },
         calendarStyle: CalendarStyle(
           selectedDecoration: BoxDecoration(color: Colors.black)

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../app_components/topAppBar.dart';
 import '../util/asset/icons.dart';
 import 'Account_Screen/account_Activity/account_Screen_assembled.dart';
-
-
 
 class MyAccountMain extends StatefulWidget {
   const MyAccountMain({super.key});
@@ -65,8 +61,3 @@ class _MyAccountMainState extends State<MyAccountMain> {
     );
   }
 }
-
-
-
-
-//CommonAppBar(lead: true,title: "Account",showLogo: true),

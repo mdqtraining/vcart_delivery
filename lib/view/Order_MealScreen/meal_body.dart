@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../Model/Orders/PickUp_model/pickup_filtered.dart';
 import '../../provider/GlobalProvide/OrderList/getAllOrdersNotifier.dart';
 import '../../provider/GlobalProvide/OrderList/particularPickupItemNotifier.dart';
 
@@ -32,21 +33,11 @@ class _MealBodyState extends State<MealBody> {
           final getProducts = Provider.of<ParticularPickupItemNotifier>(context, listen: false);
           await getProducts.getPickupData(deliveryPersonId: deliveryPersonId ?? 0);
 
-          final ordersCount = getProducts.particularPickupData?.data?.length;
-          print("Number of Orders: $ordersCount");
-
-          setState(() {
-            isExpanded = List.generate(ordersCount!, (_) => false);
-          });
         });
        }catch(e){
       print(e);
     }
   }
-
-  List<bool> isExpanded = [];
-
-  int? selectedNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +45,12 @@ class _MealBodyState extends State<MealBody> {
     return Consumer<ParticularPickupItemNotifier>(
       builder: (context,getOrders,child){
 
-        final pickData = getOrders.particularPickupData?.data;
+        final pickData = getOrders.pickupFiltered?.data;
         if(pickData == null || pickData.isEmpty ){
           return Center(
             child: Text('No orders available'),
           );
-        }else if(isExpanded.length ==0){
+        }else if(getOrders.isExpanded.length == 0){
           return Center(child: CircularProgressIndicator());
         }
         print(pickData.isEmpty);
@@ -78,7 +69,7 @@ class _MealBodyState extends State<MealBody> {
                 child: Container(
                   //margin: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
                   width: 360,
-                  height: isExpanded[index] ? null : 130,
+                  height: getOrders.isExpanded[index] ? null : 130,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
@@ -125,8 +116,8 @@ class _MealBodyState extends State<MealBody> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                isExpanded[index] =
-                                !isExpanded[index];
+                                getOrders.isExpanded[index] =
+                                !getOrders.isExpanded[index];
                               });
                             },
                             child: Padding(
@@ -165,7 +156,7 @@ class _MealBodyState extends State<MealBody> {
                             ),
                           ),
 
-                      isExpanded[index] ? Column(
+                      getOrders.isExpanded[index] ? Column(
               children: [
 
                 Padding(
@@ -382,7 +373,7 @@ class _MealBodyState extends State<MealBody> {
                                             deliveryPersonId: deliverypersonId ?? 0, orderID: pickData[index].orderId ?? 0, orderStatus: statusId(selectedValue ?? "") ?? 0);
 
                                         await Provider.of<ParticularPickupItemNotifier>(context,listen: false).getPickupData(deliveryPersonId: deliverypersonId ?? 0);
-                                        isExpanded[index] = false;
+                                        getOrders.isExpanded[index] = false;
                                       },
 
                                       style: ElevatedButton.styleFrom(
@@ -434,10 +425,11 @@ class _MealBodyState extends State<MealBody> {
     "Out for Pickup",
     "Out For Delivery",
     "Failed Delivery Attempt",
-    "Delivered",
-    "Delivery Failed",
-    "Address Issue",
-    "Delivery Rescheduled"];
+    //"Delivered",
+    //"Delivery Failed",
+    //"Address Issue",
+    //"Delivery Rescheduled"
+  ];
 
   int? statusId(String status){
     status = status.toLowerCase();
@@ -448,15 +440,6 @@ class _MealBodyState extends State<MealBody> {
         return 17;
       case 'failed delivery attempt':
         return 18;
-      case 'delivered':
-        return 19;
-        //ToDo: checl
-      case 'delivery Failed':
-        return 20;
-      case 'address issue':
-        return 21;
-      case 'delivery rescheduled':
-        return 22;
     };
   }
 
@@ -464,21 +447,11 @@ class _MealBodyState extends State<MealBody> {
     status = status.toLowerCase();
     switch(status){
       case 'out for pickup':
-        return Color(0x33FF5963);
-      case 'delivery reschedule':
-        return Color(0x33FC5862);
-      case 'failed delivery attempt':
-        return Color(0x33FC5862);
-      case 'delivery failed':
-        return Color(0x33FC5862);
-      case 'delivery rescheduled':
-        return Color(0x33FC5862);
-      case 'delivered':
         return Color(0x3397C8FF);
       case 'out for delivery':
         return Color(0x3397C8FF);
-      case 'pending':
-        return Color(0x3397C8FF);
+      case 'failed delivery attempt':
+        return Color(0x33FC5862);
     };
   }
 
@@ -486,9 +459,11 @@ class _MealBodyState extends State<MealBody> {
   Color? gettextColor(String status){
     status = status.toLowerCase();
     switch(status){
-      case 'delivery pending' && 'pickup pending' && 'pickup failed' && 'delivery failed':
+      case 'failed delivery attempt':
         return Color(0xFFE81F2B);
-        case 'pickup rescheduled' && 'delivery reschedule':
+        case 'out for pickup':
+        return Color(0xFF0050AA);
+      case 'out for delivery':
         return Color(0xFF0050AA);
     };
   }

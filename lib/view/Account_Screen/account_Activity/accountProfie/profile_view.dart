@@ -21,10 +21,9 @@ class _Account_ProfileState extends State<Account_Profile> {
 
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Provider.of<profileNotifier>(context, listen: false).fetchProfileDetailsApi();
-      final loginProvider = Provider.of<profileNotifier>(context, listen: false);
-      //if(loginProvider != )
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+       Provider.of<profileNotifier>(context, listen: false).fetchProfileDetailsApi();
+      //final loginProvider = Provider.of<profileNotifier>(context, listen: false);
     });
   }
   @override
@@ -37,6 +36,7 @@ class _Account_ProfileState extends State<Account_Profile> {
       builder: (context,profileUpdater,value) =>
       profileUpdater.profileData?.data != null ?
        Container(
+
         margin: EdgeInsets.only(bottom: 16),
         width: width,
         child:Row(
@@ -54,7 +54,7 @@ class _Account_ProfileState extends State<Account_Profile> {
                   ),
                   SizedBox(width: 16),
 
-                  Text(profileUpdater.profileData!.data!.firstName,
+                  Text(profileUpdater.profileData!.data!.firstName.toUpperCase(),
                     style: GoogleFonts.istokWeb(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
